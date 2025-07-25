@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>jungle themed game - AI Generated Game</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #000;
+            font-family: 'Outfit', system-ui, sans-serif;
+        }
+        .game-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .watermark {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            color: rgba(255,255,255,0.3);
+            font-size: 10px;
+            z-index: 1000;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        Here's a 15-second jungle-themed HTML5 mobile game where players guide a monkey to collect bananas while swinging on vines:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Jungle Swing</title>
+    <style>
+        body { margin: 0; overflow: hidden; background: #1a4720; }
+        canvas { touch-action: none; }
+        #instructions {
+            position: absolute;
+            color: white;
+            text-align: center;
+            width: 100%;
+            padding: 20px;
+            font-family: Arial;
+            background: rgba(0,0,0,0.7);
+        }
+    </style>
+</head>
+<body>
+<canvas id="gameCanvas"></canvas>
+<div id="instructions">Tap and hold to swing! Collect bananas!</div>
+<script>
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+canvas.width = 320;
+canvas.height = 568;
+
+// Tracking data
+const trackingData = {
+    swingCount: 0,
+    accuracyRate: 0,
+    riskTaking: 0,
+    bananasCollected: 0,
+    attemptedSwings: []
+};
+
+let gameTime = 15;
+let score = 0;
+let gameStarted = false;
+let gameEnded = false;
+
+// Player
+const player = {
+    x: 160,
+    y: 300,
+    radius: 15,
+    angle: 0,
+    swinging: false,
+    vineX: 160,
+    vineY: 100
+};
+
+// Bananas array
+let bananas = [];
+for(let i = 0; i < 5; i++) {
+    bananas.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * (canvas.height - 100) + 50,
+        collected: false
+    });
+}
+
+// Game loop
+function gameLoop() {
+    if(!gameEnded) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw jungle background
+        ctx.fillStyle = '#1a4720';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw vines
+        ctx.strokeStyle = '#45822E';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(player.vineX, 0);
+        ctx.lineTo(player.x, player.y);
+        ctx.stroke();
+
+        // Draw player
+        ctx.fillStyle = '#8B4513';
+        ctx.beginPath();
+        ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Draw bananas
+        ctx.fillStyle = '#FFD700';
+        bananas.forEach(banana => {
+            if(!banana.collected) {
+                ctx.beginPath();
+                ctx.arc(banana.x, banana.y, 10, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        });
+
+        // Player movement
+        if(player.swinging) {
+            player.angle += 0.05;
+            player.x = player.vineX + Math.sin(player.angle) * 100;
+            player.y = 300 + Math.cos(player.angle) * 100;
+            
+            // Collision detection
+            bananas.forEach(banana => {
+                if(!banana.collected && 
+                   Math.hypot(banana.x - player.x, banana.y - player.y) < 25) {
+                    banana.collected = true;
+                    score++;
+                    trackingData.bananasCollected++;
+                }
+            });
+        }
+
+        // Draw score and timer
+        ctx.fillStyle = 'white';
+        ctx.font = '20px Arial';
+        ctx.fillText(`Score: ${score}`, 10, 30);
+        ctx.fillText(`Time: ${Math.ceil(gameTime)}`, canvas.width - 100, 30);
+
+        if(gameStarted) {
+            gameTime -= 1/60;
+            if(gameTime <= 0) endGame();
+        }
+    }
+    requestAnimationFrame(gameLoop);
+}
+
+function endGame() {
+    gameEnded = true;
+    
+    // Calculate behavioral insights
+    trackingData.accuracyRate = trackingData.bananasCollected / trackingData.swingCount;
+    trackingData.riskTaking = trackingData.attemptedSwings.length / 15;
+    
+    // Send data to parent
+    window.parent.postMessage({
+        type: 'gameComplete',
+        score: score,
+        behavioralData: trackingData
+    }, '*');
+
+    // Show results
+    ctx.fillStyle = 'rgba(0,0,0,0.7)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = 'white';
+    ctx.textAlign = 'center';
+    ctx.fillText(`Game Over! Score: ${score}`, canvas.width/2, canvas.height/2);
+    ctx.fillText(`Your Play Style:`, canvas.width/2, canvas.height/2 + 40);
+    ctx.fillText(`${getPlayStyle()}`, canvas.width/2, canvas.height/2 + 80);
+}
+
+function getPlayStyle() {
+    if(trackingData.accuracyRate > 0.7) return "Precise Swinger";
+    if(trackingData.riskTaking > 0.8) return "Bold Explorer";
+    return "Steady Collector";
+}
+
+// Touch controls
+canvas.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    if(!gameStarted) {
+        gameStarted = true;
+        document.getElementById('instructions').style.display = 'none';
+    }
+    player.swinging = true;
+    trackingData.swingCount++;
+    trackingData.attemptedSwings.push(Date.now());
+});
+
+canvas.addEventListener('touchend', () => {
+    player.swinging = false;
+});
+
+gameLoop();
+</script>
+</body>
+</html>
+```
+
+This game features:
+
+1. Smooth swinging mechanics using sine waves
+2. Banana collection gameplay
+3. Professional jungle aesthetics
+4. Behavioral tracking:
+   - Swing frequency
+   - Accuracy rate
+   - Risk-taking behavior
+5. Play style insights reveal
+6. Touch controls optimized for mobile
+7. 15-second countdown timer
+8. Score tracking
+9. Smooth animations
+10. Clear instructions
+
+The game tracks player behavior silently and reveals insights about their playing style at the end. It's designed to be engaging for adult players while maintaining professional aesthetics and smooth performance.
+    </div>
+    <div class="watermark">GameCraft AI</div>
+    
+    <script>
+        // Prevent zooming on mobile
+        document.addEventListener('gesturestart', function (e) {
+            e.preventDefault();
+        });
+        
+        document.addEventListener('gesturechange', function (e) {
+            e.preventDefault();
+        });
+        
+        document.addEventListener('gestureend', function (e) {
+            e.preventDefault();
+        });
+        
+        // Game analytics (optional)
+        console.log('Game ID: game_1753442761191_9f9k919s55a');
+        console.log('Theme: jungle themed game');
+        console.log('Generated at: 2025-07-25T11:26:01.191Z');
+    </script>
+</body>
+</html>
