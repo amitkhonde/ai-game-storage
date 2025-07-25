@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>jungle themed game - AI Generated Game</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #000;
+            font-family: 'Outfit', system-ui, sans-serif;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        .game-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: manipulation;
+            -webkit-overflow-scrolling: touch;
+        }
+        .watermark {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            color: rgba(255,255,255,0.3);
+            font-size: 10px;
+            z-index: 1000;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Jungle Jumper</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        #gameContainer {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #1a4720;
+        }
+
+        #gameCanvas {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .ui-layer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            z-index: 10;
+        }
+
+        .button {
+            padding: 15px 30px;
+            font-size: 20px;
+            background: #4CAF50;
+            border: none;
+            border-radius: 25px;
+            color: white;
+            min-width: 44px;
+            min-height: 44px;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <canvas id="gameCanvas"></canvas>
+        <div id="startScreen" class="ui-layer">
+            <div style="text-align: center">
+                <h1 style="font-size: 32px; margin-bottom: 20px">Jungle Jumper</h1>
+                <button class="button" id="startButton">Start Game</button>
+            </div>
+        </div>
+        <div id="endScreen" class="ui-layer" style="display: none">
+            <div style="text-align: center">
+                <h2>Game Over!</h2>
+                <div id="insights" style="margin: 20px"></div>
+                <button class="button" id="replayButton">Play Again</button>
+            </div>
+        </div>
+    </div>
+
+<script>
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+const startScreen = document.getElementById('startScreen');
+const endScreen = document.getElementById('endScreen');
+const insights = document.getElementById('insights');
+
+// Game configuration
+const GAME_DURATION = 15000; // 15 seconds
+let gameWidth = 320;
+let gameHeight = 568;
+
+// Initialize tracking data
+const trackingData = {
+    reactions: [],
+    accuracy: [],
+    decisions: [],
+    timestamps: [],
+    startTime: 0
+};
+
+// Game state
+let gameActive = false;
+let player = { x: 160, y: 500, width: 40, height: 40 };
+let fruits = [];
+let score = 0;
+let lastTime = 0;
+let gameTimer = 0;
+
+// Initialize game
+function initGame() {
+    // Set canvas size and scaling
+    const scale = window.devicePixelRatio || 1;
+    canvas.width = gameWidth * scale;
+    canvas.height = gameHeight * scale;
+    canvas.style.width = gameWidth + 'px';
+    canvas.style.height = gameHeight + 'px';
+    ctx.scale(scale, scale);
+
+    // Create initial fruits
+    fruits = Array(5).fill().map(() => createFruit());
+}
+
+function createFruit() {
+    return {
+        x: Math.random() * (gameWidth - 30),
+        y: -30,
+        width: 30,
+        height: 30,
+        speed: 2 + Math.random() * 2
+    };
+}
+
+function startGame() {
+    gameActive = true;
+    score = 0;
+    gameTimer = 0;
+    trackingData.startTime = Date.now();
+    startScreen.style.display = 'none';
+    endScreen.style.display = 'none';
+    requestAnimationFrame(gameLoop);
+}
+
+function gameLoop(timestamp) {
+    if (!lastTime) lastTime = timestamp;
+    const delta = timestamp - lastTime;
+    lastTime = timestamp;
+
+    if (!gameActive) return;
+
+    gameTimer += delta;
+    if (gameTimer >= GAME_DURATION) {
+        endGame();
+        return;
+    }
+
+    // Update
+    updateFruits(delta);
+    
+    // Render
+    ctx.clearRect(0, 0, gameWidth, gameHeight);
+    drawBackground();
+    drawPlayer();
+    drawFruits();
+    drawHUD();
+
+    requestAnimationFrame(gameLoop);
+}
+
+function updateFruits(delta) {
+    fruits.forEach((fruit, index) => {
+        fruit.y += fruit.speed;
+        if (fruit.y > gameHeight) {
+            fruits[index] = createFruit();
+        }
+    });
+}
+
+function drawBackground() {
+    // Gradient background
+    const gradient = ctx.createLinearGradient(0, 0, 0, gameHeight);
+    gradient.addColorStop(0, '#4CAF50');
+    gradient.addColorStop(1, '#1a4720');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, gameWidth, gameHeight);
+}
+
+function drawPlayer() {
+    ctx.fillStyle = '#FFF';
+    ctx.fillRect(player.x, player.y, player.width, player.height);
+}
+
+function drawFruits() {
+    ctx.fillStyle = '#FF4081';
+    fruits.forEach(fruit => {
+        ctx.beginPath();
+        ctx.arc(fruit.x + 15, fruit.y + 15, 15, 0, Math.PI * 2);
+        ctx.fill();
+    });
+}
+
+function drawHUD() {
+    ctx.fillStyle = 'white';
+    ctx.font = '20px -apple-system';
+    ctx.fillText(`Score: ${score}`, 10, 30);
+    ctx.fillText(`Time: ${Math.ceil((GAME_DURATION - gameTimer) / 1000)}s`, 10, 60);
+}
+
+function endGame() {
+    gameActive = false;
+    endScreen.style.display = 'flex';
+    
+    // Calculate insights
+    const avgReactionTime = trackingData.reactions.reduce((a, b) => a + b, 0) / trackingData.reactions.length;
+    const accuracyRate = (trackingData.accuracy.filter(a => a).length / trackingData.accuracy.length) * 100;
+    
+    insights.innerHTML = `
+        <p>Score: ${score}</p>
+        <p>Average Reaction Time: ${Math.round(avgReactionTime)}ms</p>
+        <p>Accuracy Rate: ${Math.round(accuracyRate)}%</p>
+    `;
+}
+
+// Touch event handlers
+canvas.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    if (!gameActive) return;
+    
+    const touch = e.touches[0];
+    const rect = canvas.getBoundingClientRect();
+    const x = (touch.clientX - rect.left) * (canvas.width / rect.width);
+    player.x = x - player.width / 2;
+    
+    // Track interaction
+    trackingData.timestamps.push(Date.now());
+}, { passive: false });
+
+canvas.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (!gameActive) return;
+    
+    const touch = e.touches[0];
+    const rect = canvas.getBoundingClientRect();
+    const x = (touch.clientX - rect.left) * (canvas.width / rect.width);
+    player.x = x - player.width / 2;
+}, { passive: false });
+
+// Button event listeners
+document.getElementById('startButton').addEventListener('touchend', (e) => {
+    e.preventDefault();
+    startGame();
+});
+
+document.getElementById('replayButton').addEventListener('touchend', (e) => {
+    e.preventDefault();
+    startGame();
+});
+
+// Initialize game
+initGame();
+</script>
+</body>
+</html>
+    </div>
+    <div class="watermark">GameCraft AI</div>
+    
+    <script>
+        // Prevent zooming on mobile
+        document.addEventListener('gesturestart', function (e) {
+            e.preventDefault();
+        });
+        
+        document.addEventListener('gesturechange', function (e) {
+            e.preventDefault();
+        });
+        
+        document.addEventListener('gestureend', function (e) {
+            e.preventDefault();
+        });
+        
+        // Game analytics (optional)
+        console.log('Game ID: game_1753444628597_0h8pyiot2i6h');
+        console.log('Theme: jungle themed game');
+        console.log('Generated at: 2025-07-25T11:57:08.597Z');
+    </script>
+</body>
+</html>
