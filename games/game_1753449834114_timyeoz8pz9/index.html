@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Forest Ecosystem Manager</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="gameCanvas"></canvas>
+        <div id="ui-overlay">
+            <div id="resources">
+                <span id="water">💧 Water: 100%</span>
+                <span id="wildlife">🦊 Wildlife: 100</span>
+                <span id="vegetation">🌳 Trees: 100</span>
+            </div>
+            <div id="season-indicator">Spring</div>
+        </div>
+    </div>
+    <script src="game-engine.js"></script>
+    <script src="physics.js"></script>
+    <script src="ai.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
