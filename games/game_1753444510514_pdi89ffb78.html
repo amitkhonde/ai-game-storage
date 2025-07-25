@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>text based riddle game - AI Generated Game</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #000;
+            font-family: 'Outfit', system-ui, sans-serif;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        .game-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: manipulation;
+            -webkit-overflow-scrolling: touch;
+        }
+        .watermark {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            color: rgba(255,255,255,0.3);
+            font-size: 10px;
+            z-index: 1000;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Riddle Master</title>
+    <style>
+        * {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        #gameContainer {
+            position: relative;
+            width: 320px;
+            height: 568px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .screen {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .screen.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .button {
+            background: rgba(255,255,255,0.2);
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 18px;
+            margin: 10px;
+            min-width: 150px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .button:active {
+            transform: scale(0.95);
+        }
+
+        #riddle {
+            font-size: 20px;
+            text-align: center;
+            margin: 20px;
+            line-height: 1.4;
+        }
+
+        #options {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            align-items: center;
+        }
+
+        #timer {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        #score {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <div id="startScreen" class="screen active">
+            <h1 style="margin-top: 40%">Riddle Master</h1>
+            <p style="margin: 20px">Solve riddles against the clock!</p>
+            <div class="button" id="startButton">Start Game</div>
+        </div>
+
+        <div id="gameScreen" class="screen">
+            <div id="timer">15</div>
+            <div id="score">Score: 0</div>
+            <div id="riddle"></div>
+            <div id="options"></div>
+        </div>
+
+        <div id="endScreen" class="screen">
+            <h2>Game Over!</h2>
+            <div id="insights" style="margin: 20px; text-align: center"></div>
+            <div class="button" id="replayButton">Play Again</div>
+        </div>
+    </div>
+
+    <script>
+        // Behavioral tracking setup
+        const trackingData = {
+            reactions: [],
+            accuracy: [],
+            decisions: [],
+            timestamps: [],
+            startTime: 0
+        };
+
+        const riddles = [
+            {
+                question: "What has keys but no locks, space but no room, and you can enter but not go in?",
+                options: ["Keyboard", "House", "Car", "Phone"],
+                correct: 0
+            },
+            {
+                question: "What gets wetter and wetter the more it dries?",
+                options: ["Sponge", "Towel", "Paper", "Sand"],
+                correct: 1
+            },
+            // Add more riddles as needed
+        ];
+
+        let currentRiddle = 0;
+        let score = 0;
+        let timeLeft = 15;
+        let gameTimer;
+        let stimulusTime;
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => screen.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        function startGame() {
+            score = 0;
+            timeLeft = 15;
+            currentRiddle = 0;
+            trackingData.startTime = Date.now();
+            showScreen('gameScreen');
+            presentRiddle();
+            startTimer();
+        }
+
+        function presentRiddle() {
+            const riddle = riddles[currentRiddle];
+            document.getElementById('riddle').textContent = riddle.question;
+            
+            const optionsContainer = document.getElementById('options');
+            optionsContainer.innerHTML = '';
+            
+            stimulusTime = Date.now();
+            
+            riddle.options.forEach((option, index) => {
+                const button = document.createElement('div');
+                button.className = 'button';
+                button.textContent = option;
+                button.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    checkAnswer(index);
+                });
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function checkAnswer(selectedIndex) {
+            const reactionTime = Date.now() - stimulusTime;
+            trackingData.reactions.push(reactionTime);
+            
+            const correct = selectedIndex === riddles[currentRiddle].correct;
+            trackingData.accuracy.push(correct);
+            trackingData.decisions.push(selectedIndex);
+            trackingData.timestamps.push(Date.now() - trackingData.startTime);
+
+            if (correct) score += 100;
+            
+            currentRiddle++;
+            if (currentRiddle < riddles.length) {
+                presentRiddle();
+            } else {
+                endGame();
+            }
+        }
+
+        function startTimer() {
+            gameTimer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').textContent = timeLeft;
+                if (timeLeft <= 0) endGame();
+            }, 1000);
+        }
+
+        function endGame() {
+            clearInterval(gameTimer);
+            
+            // Calculate insights
+            const avgReactionTime = Math.round(trackingData.reactions.reduce((a,b) => a+b, 0) / trackingData.reactions.length);
+            const accuracyRate = Math.round((trackingData.accuracy.filter(x => x).length / trackingData.accuracy.length) * 100);
+            
+            const insights = document.getElementById('insights');
+            insights.innerHTML = `
+                <p>Average Reaction Time: ${avgReactionTime}ms</p>
+                <p>Accuracy Rate: ${accuracyRate}%</p>
+                <p>Final Score: ${score}</p>
+            `;
+            
+            showScreen('endScreen');
+        }
+
+        // Event Listeners
+        document.getElementById('startButton').addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            startGame();
+        });
+
+        document.getElementById('replayButton').addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            startGame();
+        });
+    </script>
+</body>
+</html>
+    </div>
+    <div class="watermark">GameCraft AI</div>
+    
+    <script>
+        // Prevent zooming on mobile
+        document.addEventListener('gesturestart', function (e) {
+            e.preventDefault();
+        });
+        
+        document.addEventListener('gesturechange', function (e) {
+            e.preventDefault();
+        });
+        
+        document.addEventListener('gestureend', function (e) {
+            e.preventDefault();
+        });
+        
+        // Game analytics (optional)
+        console.log('Game ID: game_1753444510514_pdi89ffb78');
+        console.log('Theme: text based riddle game');
+        console.log('Generated at: 2025-07-25T11:55:10.514Z');
+    </script>
+</body>
+</html>
