@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>A farm themed game - AI Generated Game</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #000;
+            font-family: 'Outfit', system-ui, sans-serif;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        .game-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: manipulation;
+            -webkit-overflow-scrolling: touch;
+        }
+        .watermark {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            color: rgba(255,255,255,0.3);
+            font-size: 10px;
+            z-index: 1000;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>FarmTech Dynasty</title>
+    <style>
+        * {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #2c3e50;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            overflow: hidden;
+        }
+
+        #gameCanvas {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #87CEEB;
+        }
+
+        .ui-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .hud {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            font-size: 16px;
+            text-shadow: 2px 2px 2px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+    <div class="ui-overlay">
+        <div class="hud" id="hudDisplay"></div>
+    </div>
+
+<script>
+// Game Engine Core
+class GameEngine {
+    constructor() {
+        this.canvas = document.getElementById('gameCanvas');
+        this.ctx = this.canvas.getContext('2d');
+        this.width = 320;
+        this.height = 568;
+        this.scale = window.devicePixelRatio || 1;
+        this.setupCanvas();
+        
+        // Game Systems
+        this.physics = new PhysicsEngine();
+        this.resourceManager = new ResourceManager();
+        this.weatherSystem = new WeatherSystem();
+        this.aiManager = new AIManager();
+        this.particleSystem = new ParticleSystem();
+        this.playerData = new PlayerAnalytics();
+        
+        // Game State
+        this.gameState = 'tutorial';
+        this.lastTime = 0;
+        this.deltaTime = 0;
+        
+        // Farm Elements
+        this.crops = [];
+        this.buildings = [];
+        this.workers = [];
+        
+        this.setupEventListeners();
+        this.startGame();
+    }
+
+    setupCanvas() {
+        this.canvas.width = this.width * this.scale;
+        this.canvas.height = this.height * this.scale;
+        this.canvas.style.width = this.width + 'px';
+        this.canvas.style.height = this.height + 'px';
+        this.ctx.scale(this.scale, this.scale);
+    }
+
+    setupEventListeners() {
+        this.canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const rect = this.canvas.getBoundingClientRect();
+            const x = touch.clientX - rect.left;
+            const y = touch.clientY - rect.top;
+            this.handleInput(x, y);
+        });
+    }
+
+    startGame() {
+        requestAnimationFrame((timestamp) => this.gameLoop(timestamp));
+    }
+
+    gameLoop(timestamp) {
+        this.deltaTime = (timestamp - this.lastTime) / 1000;
+        this.lastTime = timestamp;
+
+        this.update();
+        this.render();
+
+        requestAnimationFrame((timestamp) => this.gameLoop(timestamp));
+    }
+
+    update() {
+        this.physics.update(this.deltaTime);
+        this.weatherSystem.update(this.deltaTime);
+        this.aiManager.update(this.deltaTime);
+        this.particleSystem.update(this.deltaTime);
+        this.resourceManager.update(this.deltaTime);
+        
+        // Update farm elements
+        this.updateCrops();
+        this.updateBuildings();
+        this.updateWorkers();
+    }
+
+    render() {
+        this.ctx.clearRect(0, 0, this.width, this.height);
+        
+        // Render layers
+        this.renderBackground();
+        this.renderTerrain();
+        this.renderCrops();
+        this.renderBuildings();
+        this.renderWorkers();
+        this.particleSystem.render(this.ctx);
+        this.weatherSystem.render(this.ctx);
+        this.renderUI();
+    }
+}
+
+// Physics Engine
+class PhysicsEngine {
+    constructor() {
+        this.gravity = 9.81;
+        this.windForce = 0;
+        this.objects = [];
+    }
+
+    update(deltaTime) {
+        this.objects.forEach(obj => {
+            obj.velocity.x += (this.windForce * deltaTime);
+            obj.velocity.y += (this.gravity * deltaTime);
+            obj.position.x += obj.velocity.x * deltaTime;
+            obj.position.y += obj.velocity.y * deltaTime;
+        });
+    }
+}
+
+// Resource Management System
+class ResourceManager {
+    constructor() {
+        this.resources = {
+            money: 1000,
+            seeds: 50,
+            water: 100,
+            fertilizer: 25,
+            energy: 100
+        };
+        
+        this.prices = {
+            seeds: 10,
+            water: 5,
+            fertilizer: 15
+        };
+        
+        this.productionRates = {
+            water: 0.1,
+            energy: 0.2
+        };
+    }
+
+    update(deltaTime) {
+        this.resources.water += this.productionRates.water * deltaTime;
+        this.resources.energy += this.productionRates.energy * deltaTime;
+        this.checkResourceLimits();
+    }
+}
+
+// Weather System
+class WeatherSystem {
+    constructor() {
+        this.conditions = ['sunny', 'rainy', 'windy', 'stormy'];
+        this.currentCondition = 'sunny';
+        this.particles = [];
+        this.transitionTime = 0;
+    }
+
+    update(deltaTime) {
+        this.transitionTime += deltaTime;
+        if (this.transitionTime > 30) {
+            this.changeWeather();
+            this.transitionTime = 0;
+        }
+        
+        this.updateParticles(deltaTime);
+    }
+}
+
+// AI Manager
+class AIManager {
+    constructor() {
+        this.workers = [];
+        this.tasks = [];
+        this.pathfinder = new Pathfinder();
+    }
+
+    update(deltaTime) {
+        this.workers.forEach(worker => {
+            if (!worker.currentTask) {
+                worker.currentTask = this.assignTask(worker);
+            }
+            worker.update(deltaTime);
+        });
+    }
+}
+
+// Player Analytics
+class PlayerAnalytics {
+    constructor() {
+        this.data = {
+            reactionTimes: [],
+            riskChoices: [],
+            resourceManagement: [],
+            taskPrioritization: [],
+            adaptability: [],
+            planningDepth: []
+        };
+    }
+
+    analyzePersonality() {
+        const profile = {
+            riskTolerance: this.calculateRiskTolerance(),
+            decisionStyle: this.analyzeDecisionStyle(),
+            resourceEfficiency: this.calculateResourceEfficiency(),
+            adaptabilityScore: this.calculateAdaptability()
+        };
+        
+        return this.generateInsights(profile);
+    }
+}
+
+// Initialize game
+const game = new GameEngine();
+</script>
+</body>
+</html>
+    </div>
+    <div class="watermark">GameCraft AI</div>
+    
+    <script>
+        // Prevent zooming on mobile
+        document.addEventListener('gesturestart', function (e) {
+            e.preventDefault();
+        });
+        
+        document.addEventListener('gesturechange', function (e) {
+            e.preventDefault();
+        });
+        
+        document.addEventListener('gestureend', function (e) {
+            e.preventDefault();
+        });
+        
+        // Game analytics (optional)
+        console.log('Game ID: game_1753445573465_44fah75w8l7');
+        console.log('Theme: A farm themed game');
+        console.log('Generated at: 2025-07-25T12:12:53.465Z');
+    </script>
+</body>
+</html>
