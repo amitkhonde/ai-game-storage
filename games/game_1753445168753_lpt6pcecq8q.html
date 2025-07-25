@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Farm game - AI Generated Game</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #000;
+            font-family: 'Outfit', system-ui, sans-serif;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        .game-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: manipulation;
+            -webkit-overflow-scrolling: touch;
+        }
+        .watermark {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            color: rgba(255,255,255,0.3);
+            font-size: 10px;
+            z-index: 1000;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Strategic Farm Manager</title>
+    <style>
+        * {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #f0f6e8;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            overflow: hidden;
+        }
+
+        #gameCanvas {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: #ffffff;
+        }
+
+        .overlay {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.95);
+            padding: 20px;
+            font-size: 16px;
+            z-index: 100;
+        }
+
+        .button {
+            background: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 25px;
+            border: none;
+            font-size: 18px;
+            margin: 10px;
+            min-width: 200px;
+            min-height: 44px;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+    <div id="instructions" class="overlay">
+        <h2>Strategic Farm Manager</h2>
+        <p style="margin: 20px 0">
+            🌱 Plant and harvest crops strategically<br>
+            🚜 Manage resources and time efficiently<br>
+            💧 Balance water usage and crop health<br>
+            💰 Maximize profits through market timing
+        </p>
+        <p>Tap plots to plant crops. Different crops have different growth times and profits. Watch the weather forecast and market prices!</p>
+        <button class="button" id="startButton">Start Game</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const startButton = document.getElementById('startButton');
+        const instructions = document.getElementById('instructions');
+
+        // Game state
+        let gameActive = false;
+        let timeLeft = 15;
+        let score = 0;
+        let plots = [];
+        let lastTime = 0;
+        let behaviorData = {
+            reaction_times: [],
+            risk_tolerance: 0,
+            strategic_choices: 0,
+            efficiency_score: 0
+        };
+
+        // Initialize game
+        function initGame() {
+            canvas.width = 320;
+            canvas.height = 568;
+            
+            // Create farm plots
+            for(let i = 0; i < 9; i++) {
+                plots.push({
+                    x: (i % 3) * 100 + 20,
+                    y: Math.floor(i / 3) * 100 + 150,
+                    width: 80,
+                    height: 80,
+                    state: 'empty',
+                    growthTimer: 0
+                });
+            }
+
+            // Handle touch events
+            canvas.addEventListener('touchstart', handleTouch, false);
+        }
+
+        function handleTouch(e) {
+            e.preventDefault();
+            const rect = canvas.getBoundingClientRect();
+            const x = e.touches[0].clientX - rect.left;
+            const y = e.touches[0].clientY - rect.top;
+            
+            plots.forEach((plot, index) => {
+                if (x > plot.x && x < plot.x + plot.width &&
+                    y > plot.y && y < plot.y + plot.height) {
+                    plantCrop(index);
+                }
+            });
+        }
+
+        function plantCrop(plotIndex) {
+            if (plots[plotIndex].state === 'empty') {
+                plots[plotIndex].state = 'growing';
+                plots[plotIndex].growthTimer = 3;
+                behaviorData.strategic_choices++;
+            }
+        }
+
+        function gameLoop(timestamp) {
+            if (!lastTime) lastTime = timestamp;
+            const delta = (timestamp - lastTime) / 1000;
+            lastTime = timestamp;
+
+            if (gameActive) {
+                timeLeft -= delta;
+                
+                if (timeLeft <= 0) {
+                    endGame();
+                    return;
+                }
+
+                // Update
+                plots.forEach(plot => {
+                    if (plot.state === 'growing') {
+                        plot.growthTimer -= delta;
+                        if (plot.growthTimer <= 0) {
+                            plot.state = 'ready';
+                            score += 100;
+                        }
+                    }
+                });
+
+                // Render
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Draw HUD
+                ctx.fillStyle = '#333';
+                ctx.font = '20px -apple-system';
+                ctx.fillText(`Time: ${Math.ceil(timeLeft)}s`, 20, 40);
+                ctx.fillText(`Score: ${score}`, 20, 70);
+
+                // Draw plots
+                plots.forEach(plot => {
+                    ctx.fillStyle = plot.state === 'empty' ? '#8B4513' :
+                                  plot.state === 'growing' ? '#90EE90' :
+                                  '#228B22';
+                    ctx.fillRect(plot.x, plot.y, plot.width, plot.height);
+                });
+
+                requestAnimationFrame(gameLoop);
+            }
+        }
+
+        function startGame() {
+            instructions.style.display = 'none';
+            gameActive = true;
+            requestAnimationFrame(gameLoop);
+        }
+
+        function endGame() {
+            gameActive = false;
+            
+            // Generate personality insights
+            const efficiency = score / 1500; // normalized score
+            const strategy = behaviorData.strategic_choices / 15;
+            
+            const personalityReport = `
+                <h2>Farm Manager Profile</h2>
+                <p>Based on your gameplay:</p>
+                <ul style="margin: 20px 0; text-align: left">
+                    <li>Resource Management: ${efficiency > 0.7 ? 'Highly Efficient' : 'Developing'}</li>
+                    <li>Strategic Thinking: ${strategy > 0.5 ? 'Forward-Planning' : 'Reactive'}</li>
+                    <li>Decision Style: ${behaviorData.strategic_choices > 10 ? 'Methodical' : 'Spontaneous'}</li>
+                </ul>
+                <button class="button" onclick="location.reload()">Play Again</button>
+            `;
+
+            const overlay = document.createElement('div');
+            overlay.className = 'overlay';
+            overlay.innerHTML = personalityReport;
+            document.body.appendChild(overlay);
+        }
+
+        // Initialize and start
+        initGame();
+        startButton.addEventListener('touchstart', startGame, false);
+    </script>
+</body>
+</html>
+    </div>
+    <div class="watermark">GameCraft AI</div>
+    
+    <script>
+        // Prevent zooming on mobile
+        document.addEventListener('gesturestart', function (e) {
+            e.preventDefault();
+        });
+        
+        document.addEventListener('gesturechange', function (e) {
+            e.preventDefault();
+        });
+        
+        document.addEventListener('gestureend', function (e) {
+            e.preventDefault();
+        });
+        
+        // Game analytics (optional)
+        console.log('Game ID: game_1753445168753_lpt6pcecq8q');
+        console.log('Theme: Farm game');
+        console.log('Generated at: 2025-07-25T12:06:08.753Z');
+    </script>
+</body>
+</html>
