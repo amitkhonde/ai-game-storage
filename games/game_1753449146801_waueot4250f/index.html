@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Jungle Architect</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="gameCanvas"></canvas>
+        <div id="ui-overlay">
+            <div id="resources">
+                <span id="water">💧 100</span>
+                <span id="sunlight">☀️ 100</span>
+                <span id="nutrients">🌱 100</span>
+            </div>
+            <div id="species-panel">
+                <button data-species="tree">🌳</button>
+                <button data-species="flower">🌺</button>
+                <button data-species="herbivore">🦌</button>
+                <button data-species="carnivore">🐯</button>
+            </div>
+        </div>
+    </div>
+    <script src="game-engine.js"></script>
+    <script src="physics.js"></script>
+    <script src="ai.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
