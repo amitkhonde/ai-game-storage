@@ -1,0 +1,64 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+#game-container {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background: #2A4858;
+}
+
+#gameCanvas {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    touch-action: none;
+}
+
+#ui-overlay {
+    position: absolute;
+    width: 100%;
+    padding: 20px;
+    pointer-events: none;
+}
+
+#resources {
+    display: flex;
+    justify-content: space-around;
+    font-size: 24px;
+    color: white;
+    text-shadow: 2px 2px 2px rgba(0,0,0,0.5);
+    margin-bottom: 20px;
+}
+
+#species-panel {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    pointer-events: auto;
+}
+
+#species-panel button {
+    width: 60px;
+    height: 60px;
+    font-size: 30px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.9);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+#species-panel button:active {
+    transform: scale(0.95);
+}
