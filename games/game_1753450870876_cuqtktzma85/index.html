@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoSphere: Forest Guardian</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="gameCanvas"></canvas>
+        <div id="ui-overlay">
+            <div id="top-bar">
+                <div id="season">Spring</div>
+                <div id="resources">
+                    <span id="water">💧 100</span>
+                    <span id="food">🍎 100</span>
+                    <span id="wood">🌳 100</span>
+                </div>
+            </div>
+            <div id="side-panel">
+                <h3>Population</h3>
+                <div id="population-stats">
+                    <div>🦊 Predators: <span id="predators">10</span></div>
+                    <div>🐰 Prey: <span id="prey">50</span></div>
+                    <div>🌿 Plants: <span id="plants">200</span></div>
+                </div>
+            </div>
+            <div id="control-panel">
+                <button id="plant-trees">Plant Trees</button>
+                <button id="add-water">Add Water Source</button>
+                <button id="build-shelter">Build Shelter</button>
+            </div>
+        </div>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>
