@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riddle Quest</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="gameCanvas"></canvas>
+        <div id="ui-overlay">
+            <div id="menu" class="screen">
+                <h1>Riddle Quest</h1>
+                <button id="startBtn">Start Game</button>
+            </div>
+            <div id="game" class="screen hidden">
+                <div id="riddle-display"></div>
+                <div id="answer-input">
+                    <input type="text" id="playerAnswer" placeholder="Your answer...">
+                    <button id="submitAnswer">Submit</button>
+                </div>
+                <div id="score">Score: <span id="scoreValue">0</span></div>
+                <div id="timer">Time: <span id="timeValue">60</span></div>
+            </div>
+            <div id="gameOver" class="screen hidden">
+                <h2>Game Over</h2>
+                <p>Final Score: <span id="finalScore">0</span></p>
+                <button id="restartBtn">Play Again</button>
+            </div>
+        </div>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>
