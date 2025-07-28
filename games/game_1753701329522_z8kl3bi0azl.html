@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>text based riddle game - AI Generated Game</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #000;
+            font-family: 'Outfit', system-ui, sans-serif;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        .game-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: manipulation;
+            -webkit-overflow-scrolling: touch;
+        }
+        .watermark {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            color: rgba(255,255,255,0.3);
+            font-size: 10px;
+            z-index: 1000;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        # Game Design Document
+
+## Expanded Theme: "Cipher Nexus: Mind Reader"
+A mysterious text-based riddle game where players solve increasingly complex word puzzles, cryptic clues, and logic challenges. The game analyzes their solving patterns, reaction times, and approach strategies to reveal deep personality insights. Each riddle is presented with animated glyphs, morphing text, and particle effects that respond to player interactions.
+
+## Core Gameplay Loop
+1. **Goal**: Solve text-based riddles by typing answers or selecting from animated word fragments
+2. **Challenge**: Riddles increase in complexity - from simple wordplay to cryptic logic puzzles
+3. **Feedback**: Immediate visual feedback with particle explosions, text morphing, and color shifts
+4. **Reward**: Unlock new riddle types and see personality analysis build in real-time
+
+## Game Systems
+
+### Physics & Particles
+- **Floating text fragments** that players can drag and combine
+- **Particle explosions** on correct answers (success particles)
+- **Glitch effects** on wrong answers with screen shake
+- **Morphing letter animations** using physics-based transitions
+
+### UI & Visual Design
+- **Breathing UI elements** with subtle scale animations
+- **Dynamic color palette** that shifts from cool blues to warm golds as difficulty increases
+- **Layered background** with animated geometric patterns
+- **Floating glyph particles** constantly moving in the background
+
+### Input Handling
+- **Text input** for direct answer typing
+- **Drag & drop** for word fragment puzzles
+- **Tap/click** for multiple choice elements
+- **Gesture recognition** for drawing symbols on mobile
+
+### Analytics & Behavioral Tracking
+- **Reaction Time**: Speed of first interaction with each riddle
+- **Solving Strategy**: Linear vs exploratory approach
+- **Persistence**: Retry frequency and time spent per riddle
+- **Risk Taking**: Tendency to guess vs careful consideration
+- **Pattern Recognition**: Speed of identifying riddle types
+
+## Progression System
+- **Phase 1 (0-30s)**: Simple word association riddles
+- **Phase 2 (30-60s)**: Pattern recognition and logic puzzles
+- **Phase 3 (60-90s)**: Complex cryptic riddles requiring lateral thinking
+- **Visual Evolution**: Background complexity and particle density increase with each phase
+
+## Instruction Screen
+Animated SVG panel featuring:
+- **Morphing text examples** showing how riddles transform
+- **Interactive word fragments** players can immediately try
+- **Glowing pathway** showing the progression from simple to complex
+- **Personality meter preview** hinting at the final reveal
+
+## Art & Animation Style
+- **Cyberpunk-inspired** color scheme with neon accents
+- **Constant text morphing** and letter-by-letter reveals
+- **Particle trails** following cursor/finger movements
+- **Breathing UI elements** with 2-3 second pulse cycles
+- **Dynamic lighting effects** that respond to player actions
+
+## Behavioral Mapping
+- **Quick + Accurate** = "Lightning Analyst"
+- **Slow + Methodical** = "Deep Thinker" 
+- **High Retry Rate** = "Persistent Solver"
+- **Pattern Jumper** = "Intuitive Genius"
+- **Risk Taker** = "Bold Decoder"
+
+## End Reveal Screen
+Animated personality profile with:
+- **Morphing title** revealing their solver archetype
+- **Animated stats** showing their unique solving signature
+- **Particle constellation** forming their "mind pattern"
+- **Cryptic message** personalized to their discovered traits
+
+---
+
+# Implementation
+
+```json
+{
+  "gameTitle": "Cipher Nexus: Mind Reader",
+  "file": {
+    "fileName": "index.html",
+    "contentType": "text/html",
+    "encoding": "base64",
+    "content": "PCFET0NUWVBFIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KPGhlYWQ+CiAgICA8bWV0YSBjaGFyc2V0PSJVVEYtOCI+CiAgICA8bWV0YSBuYW1lPSJ2aWV3cG9ydCIgY29udGVudD0id2lkdGg9ZGV2aWNlLXdpZHRoLCBpbml0aWFsLXNjYWxlPTEuMCwgdXNlci1zY2FsYWJsZT1ubyI+CiAgICA8bWV0YSBuYW1lPSJhcHBsZS1tb2JpbGUtd2ViLWFwcC1jYXBhYmxlIiBjb250ZW50PSJ5ZXMiPgogICAgPG1ldGEgbmFtZT0iYXBwbGUtbW9iaWxlLXdlYi1hcHAtc3RhdHVzLWJhci1zdHlsZSIgY29udGVudD0iYmxhY2stdHJhbnNsdWNlbnQiPgogICAgPHRpdGxlPkNpcGhlciBOZXh1czogTWluZCBSZWFkZXI8L3RpdGxlPgogICAgPHNjcmlwdCBzcmM9Imh0dHBzOi8vY2RuanMuY2xvdWRmbGFyZS5jb20vYWpheC9saWJzL2dzYXAvMy4xMi4yL2dzYXAubWluLmpzIj48L3NjcmlwdD4KICAgIDxzdHlsZT4KICAgICAgICAqIHsKICAgICAgICAgICAgbWFyZ2luOiAwOwogICAgICAgICAgICBwYWRkaW5nOiAwOwogICAgICAgICAgICBib3gtc2l6aW5nOiBib3JkZXItYm94OwogICAgICAgIH0KCiAgICAgICAgYm9keSB7CiAgICAgICAgICAgIGZvbnQtZmFtaWx5OiAnQ291cmllciBOZXcnLCBtb25vc3BhY2U7CiAgICAgICAgICAgIGJhY2tncm91bmQ6IGxpbmVhci1ncmFkaWVudCgxMzVkZWcsICMwYTBhMjMsICMxYTE5M2EsICMwYTBhMjMpOwogICAgICAgICAgICBiYWNrZ3JvdW5kLXNpemU6IDQwMCUgNDAwJTsKICAgICAgICAgICAgYW5pbWF0aW9uOiBncmFkaWVudFNoaWZ0IDEwcyBlYXNlIGluZmluaXRlOwogICAgICAgICAgICBvdmVyZmxvdzogaGlkZGVuOwogICAgICAgICAgICBoZWlnaHQ6IDEwMHZoOwogICAgICAgICAgICBjb2xvcjogIzAwZmZmZjsKICAgICAgICB9CgogICAgICAgIEBrZXlmcmFtZXMgZ3JhZGllbnRTaGlmdCB7CiAgICAgICAgICAgIDAlIHsgYmFja2dyb3VuZC1wb3NpdGlvbjogMCUgNTAlOyB9CiAgICAgICAgICAgIDUwJSB7IGJhY2tncm91bmQtcG9zaXRpb246IDEwMCUgNTAlOyB9CiAgICAgICAgICAgIDEwMCUgeyBiYWNrZ3JvdW5kLXBvc2l0aW9uOiAwJSA1MCU7IH0KICAgICAgICB9CgogICAgICAgICNnYW1lQ29udGFpbmVyIHsKICAgICAgICAgICAgcG9zaXRpb246IHJlbGF0aXZlOwogICAgICAgICAgICB3aWR0aDogMTAwdnc7CiAgICAgICAgICAgIGhlaWdodDogMTAwdmg7CiAgICAgICAgICAgIG92ZXJmbG93OiBoaWRkZW47CiAgICAgICAgfQoKICAgICAgICAjZ2FtZUNhbnZhcyB7CiAgICAgICAgICAgIGRpc3BsYXk6IGJsb2NrOwogICAgICAgICAgICBiYWNrZ3JvdW5kOiB0cmFuc3BhcmVudDsKICAgICAgICB9CgogICAgICAgIC5pbnN0cnVjdGlvbi1wYW5lbCB7CiAgICAgICAgICAgIHBvc2l0aW9uOiBhYnNvbHV0ZTsKICAgICAgICAgICAgdG9wOiA1MCU7CiAgICAgICAgICAgIGxlZnQ6IDUwJTsKICAgICAgICAgICAgdHJhbnNmb3JtOiB0cmFuc2xhdGUoLTUwJSwgLTUwJSk7CiAgICAgICAgICAgIGJhY2tncm91bmQ6IHJhZGlhbC1ncmFkaWVudChjbG9zZXN0LXNpZGUsIHJnYmEoMCwgMjU1LCAyNTUsIDAuMSkgMCUsIHJnYmEoMTI4LCAwLCAyNTUsIDAuMSkgMTAwJSk7CiAgICAgICAgICAgIGJvcmRlcjogMnB4IHNvbGlkICMwMGZmZmY7CiAgICAgICAgICAgIGJvcmRlci1yYWRpdXM6IDIwcHg7CiAgICAgICAgICAgIHBhZGRpbmc6IDMwcHg7CiAgICAgICAgICAgIG1heC13aWR0aDogODB2dzsKICAgICAgICAgICAgbWF4LWhlaWdodDogODB2aDsKICAgICAgICAgICAgdGV4dC1hbGlnbjogY2VudGVyOwogICAgICAgICAgICBib3gtc2hhZG93OiAwIDAgNDBweCByZ2JhKDAsIDI1NSwgMjU1LCAwLjMpOwogICAgICAgICAgICBhbmltYXRpb246IHBhbmVsQnJlYXRoZSAzcyBlYXNlLWluLW91dCBpbmZpbml0ZTsKICAgICAgICB9CgogICAgICAgIEBrZXlmcmFtZXMgcGFuZWxCcmVhdGhlIHsKICAgICAgICAgICAgMCUsIDEwMCUgeyB0cmFuc2Zvcm06IHRyYW5zbGF0ZSgtNTAlLCAtNTAlKSBzY2FsZSgxKTsgfQogICAgICAgICAgICA1MCUgeyB0cmFuc2Zvcm06IHRyYW5zbGF0ZSgtNTAlLCAtNTAlKSBzY2FsZSgxLjAyKTsgfQogICAgICAgIH0KCiAgICAgICAgLmluc3RydWN0aW9uLXBhbmVsIGgxIHsKICAgICAgICAgICAgZm9udC1zaXplOiAyLjVlbTsKICAgICAgICAgICAgbWFyZ2luLWJvdHRvbTogMjBweDsKICAgICAgICAgICAgY29sb3I6ICNmZmZmZmY7CiAgICAgICAgICAgIHRleHQtc2hhZG93OiAwIDAgMTBweCMwMGZmZmY7CiAgICAgICAgICAgIGFuaW1hdGlvbjogdGV4dEdsb3cgMnMgZWFzZS1pbi1vdXQgaW5maW5pdGUgYWx0ZXJuYXRlOwogICAgICAgIH0KCiAgICAgICAgQGtleWZyYW1lcyB0ZXh0R2xvdyB7CiAgICAgICAgICAgIGZyb20geyB0ZXh0LXNoYWRvdzogMCAwIDEwcHggIzAwZmZmZjsgfQogICAgICAgICAgICB0byB7IHRleHQtc2hhZG93OiAwIDAgMjBweCMwMGZmZmYsIDAgMCAzMHB4ICM4MDAwZmY7IH0KICAgICAgICB9CgogICAgICAgIC5pbnN0cnVjdGlvbi1wYW5lbCBwIHsKICAgICAgICAgICAgZm9udC1zaXplOiAxLjJlbTsKICAgICAgICAgICAgbGluZS1oZWlnaHQ6IDEuNjsKICAgICAgICAgICAgbWFyZ2luLWJvdHRvbTogMjBweDsKICAgICAgICAgICAgY29sb3I6ICNjY2NjY2M7CiAgICAgICAgfQoKICAgICAgICAuc3RhcnQtYnV0dG9uIHsKICAgICAgICAgICAgYmFja2dyb3VuZDogbGluZWFyLWdyYWRpZW50KDQ1ZGVnLCAjMDBmZmZmLCAjODAwMGZmKTsKICAgICAgICAgICAgYm9yZGVyOiBub25lOwogICAgICAgICAgICBwYWRkaW5nOiAxNXB4IDMwcHg7CiAgICAgICAgICAgIGZvbnQtc2l6ZTogMS4zZW07CiAgICAgICAgICAgIGZvbnQtZmFtaWx5OiBpbmhlcml0OwogICAgICAgICAgICBjb2xvcjogd2hpdGU7CiAgICAgICAgICAgIGJvcmRlci1yYWRpdXM6IDEwcHg7CiAgICAgICAgICAgIGN1cnNvcjogcG9pbnRlcjsKICAgICAgICAgICAgdHJhbnNpdGlvbjogYWxsIDAuM3M7CiAgICAgICAgICAgIGJveC1zaGFkb3c6IDAgMCAyMHB4IHJnYmEoMCwgMjU1LCAyNTUsIDAuNSk7CiAgICAgICAgICAgIGFuaW1hdGlvbjogYnV0dG9uUHVsc2UgMnMgZWFzZS1pbi1vdXQgaW5maW5pdGU7CiAgICAgICAgfQoKICAgICAgICBAa2V5ZnJhbWVzIGJ1dHRvblB1bHNlIHsKICAgICAgICAgICAgMCUsIDEwMCUgeyBib3gtc2hhZG93OiAwIDAgMjBweCByZ2JhKDAsIDI1NSwgMjU1LCAwLjUpOyB9CiAgICAgICAgICAgIDUwJSB7IGJveC1zaGFkb3c6IDAgMCAzMHB4IHJnYmEoMCwgMjU1LCAyNTUsIDAuOCksIDAgMCA0MHB4IHJnYmEoMTI4LCAwLCAyNTUsIDAuNik7IH0KICAgICAgICB9CgogICAgICAgIC5zdGFydC1idXR0b246aG92ZXIgewogICAgICAgICAgICB0cmFuc2Zvcm06IHNjYWxlKDEuMDUpOwogICAgICAgICAgICBib3gtc2hhZG93OiAwIDAgMzBweCByZ2JhKDAsIDI1NSwgMjU1LCAwLjgpOwogICAgICAgIH0KCiAgICAgICAgLmdhbWUtdWkgewogICAgICAgICAgICBwb3NpdGlvbjogYWJzb2x1dGU7CiAgICAgICAgICAgIHRvcDogMjBweDsKICAgICAgICAgICAgbGVmdDogMjBweDsKICAgICAgICAgICAgcmlnaHQ6IDIwcHg7CiAgICAgICAgICAgIGRpc3BsYXk6IGZsZXg7CiAgICAgICAgICAgIGp1c3RpZnktY29udGVudDogc3BhY2UtYmV0d2VlbjsKICAgICAgICAgICAgYWxpZ24taXRlbXM6IGNlbnRlcjsKICAgICAgICAgICAgZm9udC1zaXplOiAxLjJlbTsKICAgICAgICAgICAgY29sb3I6ICNmZmZmZmY7CiAgICAgICAgICAgIHotaW5kZXg6IDEwMDA7CiAgICAgICAgfQoKICAgICAgICAucmlkZGxlLWNvbnRhaW5lciB7CiAgICAgICAgICAgIHBvc2l0aW9uOiBhYnNvbHV0ZTsKICAgICAgICAgICAgdG9wOiA1MCU7CiAgICAgICAgICAgIGxlZnQ6IDUwJTsKICAgICAgICAgICAgdHJhbnNmb3JtOiB0cmFuc2xhdGUoLTUwJSwgLTUwJSk7CiAgICAgICAgICAgIHRleHQtYWxpZ246IGNlbnRlcjsKICAgICAgICAgICAgbWF4LXdpZHRoOiA4MHZ3OwogICAgICAgICAgICB6LWluZGV4OiAxMDAwOwogICAgICAgIH0KCiAgICAgICAgLnJpZGRsZS10ZXh0IHsKICAgICAgICAgICAgZm9udC1zaXplOiAxLjhlbTsKICAgICAgICAgICAgbWFyZ2luLWJvdHRvbTogMzBweDsKICAgICAgICAgICAgY29sb3I6ICNmZmZmZmY7CiAgICAgICAgICAgIHRleHQtc2hhZG93OiAwIDAgMTBweCByZ2JhKDAsIDI1NSwgMjU1LCAwLjcpOwogICAgICAgICAgICBsaW5lLWhlaWdodDogMS40OwogICAgICAgICAgICBhbmltYXRpb246IHRleHRGbG9hdCAzcyBlYXNlLWluLW91dCBpbmZpbml0ZTsKICAgICAgICB9CgogICAgICAgIEBrZXlmcmFtZXMgdGV4dEZsb2F0IHsKICAgICAgICAgICAgMCUsIDEwMCUgeyB0cmFuc2Zvcm06IHRyYW5zbGF0ZVkoMCk7IH0KICAgICAgICAgICAgNTAlIHsgdHJhbnNmb3JtOiB0cmFuc2xhdGVZKC01cHgpOyB9CiAgICAgICAgfQoKICAgICAgICAuYW5zd2VyLWlucHV0IHsKICAgICAgICAgICAgZm9udC1zaXplOiAxLjVlbTsKICAgICAgICAgICAgcGFkZGluZzogMTVweDsKICAgICAgICAgICAgYm9yZGVyOiAycHggc29saWQgIzAwZmZmZjsKICAgICAgICAgICAgYmFja2dyb3VuZDogcmdiYSgwLCAwLCAwLCAwLjcpOwogICAgICAgICAgICBjb2xvcjogI2ZmZmZmZjsKICAgICAgICAgICAgYm9yZGVyLXJhZGl1czogMTBweDsKICAgICAgICAgICAgd2lkdGg6IDMwMHB4OwogICAgICAgICAgICBtYXgtd2lkdGg6IDgwdnc7CiAgICAgICAgICAgIHRleHQtYWxpZ246IGNlbnRlcjsKICAgICAgICAgICAgZm9udC1mYW1pbHk6IGluaGVyaXQ7CiAgICAgICAgICAgIG91dGxpbmU6IG5vbmU7CiAgICAgICAgICAgIGJveC1zaGFkb3c6IDAgMCAyMHB4IHJnYmEoMCwgMjU1LCAyNTUsIDAuMyk7CiAgICAgICAgICAgIGFuaW1hdGlvbjogaW5wdXRCcmVhdGhlIDJzIGVhc2UtaW4tb3V0IGluZmluaXRlOwogICAgICAgIH0KCiAgICAgICAgQGtleWZyYW1lcyBpbnB1dEJyZWF0aGUgewogICAgICAgICAgICAwJSwgMTAwJSB7IGJveC1zaGFkb3c6IDAgMCAyMHB4IHJnYmEoMCwgMjU1LCAyNTUsIDAuMyk7IH0KICAgICAgICAgICAgNTAlIHsgYm94LXNoYWRvdzogMCAwIDMwcHggcmdiYSgwLCAyNTUsIDI1NSwgMC42KTsgfQogICAgICAgIH0KCiAgICAgICAgLmFuc3dlci1pbnB1dDpmb2N1cyB7CiAgICAgICAgICAgIGJvcmRlci1jb2xvcjogIzgwMDBmZjsKICAgICAgICAgICAgYm94LXNoYWRvdzogMCAwIDMwcHggcmdiYSgxMjgsIDAsIDI1NSwgMC42KTsKICAgICAgICB9CgogICAgICAgIC5wZXJzb25hbGl0eS1yZXZlYWwgewogICAgICAgICAgICBwb3NpdGlvbjogYWJzb2x1dGU7CiAgICAgICAgICAgIHRvcDogNTAlOwogICAgICAgICAgICBsZWZ0OiA1MCU7CiAgICAgICAgICAgIHRyYW5zZm9ybTogdHJhbnNsYXRlKC01MCUsIC01MCUpOwogICAgICAgICAgICB0ZXh0LWFsaWduOiBjZW50ZXI7CiAgICAgICAgICAgIG1heC13aWR0aDogODB2dzsKICAgICAgICAgICAgei1pbmRleDogMTAwMDsKICAgICAgICAgICAgYmFja2dyb3VuZDogcmFkaWFsLWdyYWRpZW50KGNsb3Nlc3Qtc2lkZSwgcmdiYSgwLCAyNTUsIDI1NSwgMC4xNSkgMCUsIHJnYmEoMTI4LCAwLCAyNTUsIDAuMTUpIDEwMCUpOwogICAgICAgICAgICBib3JkZXI6IDJweCBzb2xpZCAjZmZmZmZmOwogICAgICAgICAgICBib3JkZXItcmFkaXVzOiAyMHB4OwogICAgICAgICAgICBwYWRkaW5nOiA0MHB4OwogICAgICAgICAgICBib3gtc2hhZG93OiAwIDAgNTBweCByZ2JhKDI1NSwgMjU1LCAyNTUsIDAuNCk7CiAgICAgICAgfQoKICAgICAgICAucGVyc29uYWxpdHktcmV2ZWFsIGgxIHsKICAgICAgICAgICAgZm9udC1zaXplOiAzZW07CiAgICAgICAgICAgIG1hcmdpbi1ib3R0b206IDIwcHg7CiAgICAgICAgICAgIGNvbG9yOiAjZmZmZmZmOwogICAgICAgICAgICB0ZXh0LXNoYWRvdzogMCAwIDIwcHggI2ZmZmZmZjsKICAgICAgICAgICAgYW5pbWF0aW9uOiB0aXRsZVB1bHNlIDJzIGVhc2UtaW4tb3V0IGluZmluaXRlOwogICAgICAgIH0KCiAgICAgICAgQGtleWZyYW1lcyB0aXRsZVB1bHNlIHsKICAgICAgICAgICAgMCUsIDEwMCUgeyB0ZXh0LXNoYWRvdzogMCAwIDIwcHggI2ZmZmZmZjsgfQogICAgICAgICAgICA1MCUgeyB0ZXh0LXNoYWRvdzogMCAwIDMwcHggI2ZmZmZmZiwgMCAwIDQwcHggIzAwZmZmZjsgfQogICAgICAgIH0KCiAgICAgICAgLnBlcnNvbmFsaXR5LXJldmVhbCAucHJvZmlsZSB7CiAgICAgICAgICAgIGZvbnQtc2l6ZTogMS4zZW07CiAgICAgICAgICAgIGxpbmUtaGVpZ2h0OiAxLjY7CiAgICAgICAgICAgIGNvbG9yOiAjY2NjY2NjOwogICAgICAgICAgICBtYXJnaW4tYm90dG9tOiAyMHB4OwogICAgICAgIH0KCiAgICAgICAgLnN0YXRzIHsKICAgICAgICAgICAgZGlzcGxheTogZ3JpZDsKICAgICAgICAgICAgZ3JpZC10ZW1wbGF0ZS1jb2x1bW5zOiByZXBlYXQoYXV0by1maXQsIG1pbm1heCgxNTBweCwgMWZyKSk7CiAgICAgICAgICAgIGdhcDogMTVweDsKICAgICAgICAgICAgbWFyZ2luLXRvcDogMjBweDsKICAgICAgICB9CgogICAgICAgIC5zdGF0LWl0ZW0gewogICAgICAgICAgICBiYWNrZ3JvdW5kOiByZ2JhKDAsIDI1NSwgMjU1LCAwLjEpOwogICAgICAgICAgICBib3JkZXI6IDFweCBzb2xpZCAjMDBmZmZmOwogICAgICAgICAgICBib3JkZXItcmFkaXVzOiAxMHB4OwogICAgICAgICAgICBwYWRkaW5nOiAxNXB4OwogICAgICAgICAgICB0ZXh0LWFsaWduOiBjZW50ZXI7CiAgICAgICAgICAgIGFuaW1hdGlvbjogc3RhdEZsb2F0IDNzIGVhc2UtaW4tb3V0IGluZmluaXRlOwogICAgICAgIH0KCiAgICAgICAgLnN0YXQtaXRlbTpudGgtY2hpbGQoMikgeyBhbmltYXRpb24tZGVsYXk6IDAuNXM7IH0KICAgICAgICAuc3RhdC1pdGVtOm50aC1jaGlsZCgzKSB7IGFuaW1hdGlvbi1kZWxheTogMXM7IH0KICAgICAgICAuc3RhdC1pdGVtOm50aC1jaGlsZCg0KSB7IGFuaW1hdGlvbi1kZWxheTogMS41czsgfQoKICAgICAgICBAa2V5ZnJhbWVzIHN0YXRGbG9hdCB7CiAgICAgICAgICAgIDAlLCAxMDAlIHsgdHJhbnNmb3JtOiB0cmFuc2xhdGVZKDApOyB9CiAgICAgICAgICAgIDUwJSB7IHRyYW5zZm9ybTogdHJhbnNsYXRlWSgtM3B4KTsgfQogICAgICAgIH0KCiAgICAgICAgLnN0YXQtdmFsdWUgewogICAgICAgICAgICBmb250LXNpemU6IDEuNWVtOwogICAgICAgICAgICBmb250LXdlaWdodDogYm9sZDsKICAgICAgICAgICAgY29sb3I6ICMwMGZm
+    </div>
+    <div class="watermark">GameCraft AI</div>
+    
+    <script>
+        // Prevent zooming on mobile
+        document.addEventListener('gesturestart', function (e) {
+            e.preventDefault();
+        });
+        
+        document.addEventListener('gesturechange', function (e) {
+            e.preventDefault();
+        });
+        
+        document.addEventListener('gestureend', function (e) {
+            e.preventDefault();
+        });
+        
+        // Game analytics (optional)
+        console.log('Game ID: game_1753701329522_z8kl3bi0azl');
+        console.log('Theme: text based riddle game');
+        console.log('Generated at: 2025-07-28T11:15:29.522Z');
+    </script>
+</body>
+</html>
