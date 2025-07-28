@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Cipher Mind - AI Generated Game</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #000;
+            font-family: 'Outfit', system-ui, sans-serif;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        .game-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: manipulation;
+            -webkit-overflow-scrolling: touch;
+        }
+        .watermark {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            color: rgba(255,255,255,0.3);
+            font-size: 10px;
+            z-index: 1000;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Cipher Mind</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            position: relative;
+        }
+        
+        #gameCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: transparent;
+            cursor: pointer;
+        }
+        
+        .ui-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+        
+        .game-hud {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            pointer-events: none;
+        }
+        
+        .timer {
+            background: rgba(255,255,255,0.1);
+            padding: 10px 20px;
+            border-radius: 25px;
+            border: 2px solid #4ecdc4;
+            animation: pulse 2s infinite;
+        }
+        
+        .score {
+            background: rgba(255,255,255,0.1);
+            padding: 10px 20px;
+            border-radius: 25px;
+            border: 2px solid #ffd700;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .instruction-panel {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.9);
+            border-radius: 20px;
+            padding: 30px;
+            color: white;
+            text-align: center;
+            border: 3px solid #4ecdc4;
+            max-width: 90vw;
+            max-height: 90vh;
+            z-index: 100;
+        }
+        
+        .instruction-panel h2 {
+            color: #4ecdc4;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        
+        .instruction-panel p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        
+        .start-btn {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: transform 0.3s;
+            pointer-events: all;
+        }
+        
+        .start-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .riddle-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.8);
+            border-radius: 15px;
+            padding: 30px;
+            color: white;
+            text-align: center;
+            border: 2px solid #4ecdc4;
+            min-width: 300px;
+            max-width: 90vw;
+            pointer-events: all;
+        }
+        
+        .riddle-text {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #4ecdc4;
+        }
+        
+        .answer-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .answer-btn {
+            background: rgba(255,255,255,0.1);
+            border: 2px solid #4ecdc4;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 16px;
+            min-width: 80px;
+            animation: breathe 3s infinite;
+        }
+        
+        .answer-btn:hover {
+            background: rgba(78, 205, 196, 0.3);
+            transform: scale(1.05);
+        }
+        
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        
+        .personality-reveal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 40px;
+            color: white;
+            text-align: center;
+            border: 3px solid #ffd700;
+            max-width: 90vw;
+            z-index: 100;
+            animation: slideIn 1s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+        
+        .personality-title {
+            font-size: 28px;
+            color: #ffd700;
+            margin-bottom: 20px;
+        }
+        
+        .personality-description {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .stats {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .game-hud {
+                font-size: 14px;
+            }
+            .riddle-text {
+                font-size: 18px;
+            }
+            .answer-btn {
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+    
+    <div class="ui-overlay">
+        <div class="game-hud hidden" id="gameHud">
+            <div class="timer" id="timer">Time: 30</div>
+            <div class="score" id="score">Score: 0</div>
+        </div>
+    </div>
+    
+    <div class="instruction-panel" id="instructionPanel">
+        <h2>🔮 Cipher Mind 🔮</h2>
+        <svg width="100" height="100" viewBox="0 0 100 100" style="margin: 20px auto; display: block;">
+            <circle cx="50" cy="50" r="40" fill="none" stroke="#4ecdc4" stroke-width="3">
+                <animate attributeName="r" values="35;45;35" dur="2s" repeatCount="indefinite"/>
+            </circle>
+            <polygon points="50,20 65,40 50,35 35,40" fill="#4ecdc4">
+                <animateTransform attributeName="transform" type="rotate" values="0 50 50;360 50 50" dur="4s" repeatCount="indefinite"/>
+            </polygon>
+            <text x="50" y="70" text-anchor="middle" fill="#4ecdc4" font-size="12">?</text>
+        </svg>
+        <p>Decode ancient riddles and mysterious symbols</p>
+        <p>⚡ Think fast - time is limited!</p>
+        <p>🧠 Each choice reveals your mind's nature</p>
+        <p>📱 Tap answers to solve the puzzles</p>
+        <button class="start-btn" onclick="game.startGame()">Begin the Mystery</button>
+    </div>
+    
+    <div class="riddle-container hidden" id="riddleContainer">
+        <div class="riddle-text" id="riddleText"></div>
+        <div class="answer-options" id="answerOptions"></div>
+    </div>
+    
+    <div class="personality-reveal hidden" id="personalityReveal">
+        <div class="personality-title" id="personalityTitle"></div>
+        <div class="personality-description" id="personalityDescription"></div>
+        <div class="stats" id="personalityStats"></div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        class CipherMind {
+            constructor() {
+                this.canvas = document.getElementById('gameCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.state = 'instructions';
+                this.score = 0;
+                this.level = 1;
+                this.timeLeft = 30;
+                this.currentRiddle = null;
+                this.particles = [];
+                this.backgroundParticles = [];
+                
+                // Behavioral tracking
+                this.analytics = {
+                    startTime: Date.now(),
+                    reactionTimes: [],
+                    retries: 0,
+                    hintsUsed: 0,
+                    correctAnswers: 0,
+                    totalAnswers: 0,
+                    avgResponseTime: 0,
+                    riddleStartTime: 0
+                };
+                
+                this.riddles = [
+                    {
+                        question: "🔺🔻🔺🔻?",
+                        answers: ["🔺", "🔻", "⭐", "🔶"],
+                        correct: 0,
+                        type: "pattern"
+                    },
+                    {
+                        question: "If ⚡ = 3, 🌟 = 5, then ⚡🌟 = ?",
+                        answers: ["8", "15", "35", "53"],
+                        correct: 1,
+                        type: "math"
+                    },
+                    {
+                        question: "🌙➡️☀️➡️🌙➡️?",
+                        answers: ["🌙", "☀️", "⭐", "🌍"],
+                        correct: 1,
+                        type: "sequence"
+                    },
+                    {
+                        question: "Ancient rune: ᚱᚢᚾᛖ spells RUNE. What does ᚠᛁᚱᛖ spell?",
+                        answers: ["FIRE", "WIRE", "TIRE", "DIRE"],
+                        correct: 0,
+                        type: "cipher"
+                    },
+                    {
+                        question: "Mirror riddle: EMIT backwards is?",
+                        answers: ["TIME", "MITE", "ITEM", "TEMI"],
+                        correct: 0,
+                        type: "reverse"
+                    }
+                ];
+                
+                this.init();
+            }
+            
+            init() {
+                this.resizeCanvas();
+                window.addEventListener('resize', () => this.resizeCanvas());
+                this.canvas.addEventListener('click', (e) => this.handleClick(e));
+                this.canvas.addEventListener('touchstart', (e) => this.handleTouch(e));
+                
+                // Create background particles
+                for(let i = 0; i < 50; i++) {
+                    this.backgroundParticles.push({
+                        x: Math.random() * this.canvas.width,
+                        y: Math.random() * this.canvas.height,
+                        vx: (Math.random() - 0.5) * 0.5,
+                        vy: (Math.random() - 0.5) * 0.5,
+                        size: Math.random() * 3 + 1,
+                        opacity: Math.random() * 0.5 + 0.1
+                    });
+                }
+                
+                this.gameLoop();
+            }
+            
+            resizeCanvas() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            }
+            
+            startGame() {
+                this.state = 'playing';
+                this.analytics.startTime = Date.now();
+                document.getElementById('instructionPanel').classList.add('hidden');
+                document.getElementById('gameHud').classList.remove('hidden');
+                document.getElementById('riddleContainer').classList.remove('hidden');
+                
+                this.nextRiddle();
+                this.startTimer();
+            }
+            
+            nextRiddle() {
+                if(this.level > this.riddles.length) {
+                    this.endGame();
+                    return;
+                }
+                
+                this.currentRiddle = this.riddles[this.level - 1];
+                this.analytics.riddleStartTime = Date.now();
+                
+                document.getElementById('riddleText').textContent = this.currentRiddle.question;
+                
+                const optionsContainer = document.getElementById('answerOptions');
+                optionsContainer.innerHTML = '';
+                
+                this.currentRiddle.answers.forEach((answer, index) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'answer-btn';
+                    btn.textContent = answer;
+                    btn.onclick = () => this.selectAnswer(index);
+                    optionsContainer.appendChild(btn);
+                });
+                
+                // Add breathing animation with GSAP
+                gsap.fromTo('.answer-btn', 
+                    { scale: 0, opacity: 0 },
+                    { scale: 1, opacity: 1, duration: 0.5, stagger: 0.1, ease: "back.out(1.7)" }
+                );
+            }
+            
+            selectAnswer(answerIndex) {
+                const reactionTime = Date.now() - this.analytics.riddleStartTime;
+                this.analytics.reactionTimes.push(reactionTime);
+                this.analytics.totalAnswers++;
+                
+                if(answerIndex === this.currentRiddle.correct) {
+                    this.analytics.correctAnswers++;
+                    this.score += Math.max(100 - Math.floor(reactionTime / 100), 10);
+                    this.createSuccessParticles();
+                    this.level++;
+                    
+                    gsap.to('#riddleContainer', {
+                        scale: 1.1,
+                        duration: 0.2,
+                        yoyo: true,
+                        repeat: 1,
+                        onComplete: () => this.nextRiddle()
+                    });
+                } else {
+                    this.analytics.retries++;
+                    this.createFailureParticles();
+                    
+                    gsap.to('#riddleContainer', {
+                        x: 10,
+                        duration: 0.1,
+                        yoyo: true,
+                        repeat: 5,
+                        ease: "power2.inOut"
+                    });
+                }
+                
+                this.updateHUD();
+            }
+            
+            createSuccessParticles() {
+                for(let i = 0; i < 20; i++) {
+                    this.particles.push({
+                        x: this.canvas.width / 2,
+                        y: this.canvas.height / 2,
+                        vx: (Math.random() - 0.5) * 10,
+                        vy: (Math.random() - 0.5) * 10,
+                        life: 60,
+                        maxLife: 60,
+                        color: `hsl(${Math.random() * 60 + 40}, 100%, 60%)`,
+                        size: Math.random() * 5 + 2
+                    });
+                }
+            }
+            
+            createFailureParticles() {
+                for(let i = 0; i < 15; i++) {
+                    this.particles.push({
+                        x: this.canvas.width / 2,
+                        y: this.canvas.height / 2,
+                        vx: (Math.random() - 0.5) * 6,
+                        vy: (Math.random() - 0.5) * 6,
+                        life: 40,
+                        maxLife: 40,
+                        color: `hsl(${Math.random() * 30}, 100%, 50%)`,
+                        size: Math.random() * 3 + 1
+                    });
+                }
+            }
+            
+            startTimer() {
+                this.timerInterval = setInterval(() => {
+                    this.timeLeft--;
+                    if(this.timeLeft <= 0) {
+                        this.endGame();
+                    }
+                    this.updateHUD();
+                }, 1000);
+            }
+            
+            updateHUD() {
+                document.getElementById('timer').textContent = `Time: ${this.timeLeft}`;
+                document.getElementById('score').textContent = `Score: ${this.score}`;
+            }
+            
+            endGame() {
+                this.state = 'gameOver';
+                clearInterval(this.timerInterval);
+                
+                document.getElementById('gameHud').classList.add('hidden');
+                document.getElementById('riddleContainer').classList.add('hidden');
+                
+                this.calculatePersonality();
+                this.showPersonalityReveal();
+            }
+            
+            calculatePersonality() {
+                const avgReactionTime = this.analytics.reactionTimes.reduce((a, b) => a + b, 0) / this.analytics.reactionTimes.length;
+                const accuracy = this.analytics.correctAnswers / this.analytics.totalAnswers;
+                const persistence = this.analytics.retries;
+                
+                let personality = "";
+                let description = "";
+                
+                if(avgReactionTime < 2000 && accuracy > 0.7) {
+                    personality = "⚡ Lightning Mind";
+                    description = "You think fast and strike true! Your quick intuition and sharp reflexes make you a natural problem solver. You trust your instincts and rarely second-guess yourself.";
+                } else if(accuracy > 0.8) {
+                    personality = "🧙‍♂️ Ancient Sage";
+                    description = "Methodical and wise, you approach each challenge with careful consideration. Your high accuracy shows a mind that values precision over speed. Patience is your greatest strength.";
+                } else if(persistence > 2) {
+                    personality = "📚 Persistent Scholar";
+                    description = "You never give up! Even when faced with difficult challenges, you keep trying until you succeed. Your determination and willingness to learn from mistakes sets you apart.";
+                } else {
+                    personality = "🗡️ Bold Explorer";
+                    description = "You're not afraid to take risks and try new approaches. Your adventurous spirit leads you to make bold choices, even when the outcome is uncertain. Creativity is your weapon.";
+                }
+                
+                this.personalityResult = {
+                    title: personality,
+                    description: description,
+                    stats: {
+                        accuracy: Math.round(accuracy * 100),
+                        avgTime: Math.round(avgReactionTime / 1000 * 10) / 10,
+                        retries: persistence,
+                        score: this.score
+                    }
+                };
+            }
+            
+            showPersonalityReveal() {
+                const reveal = document.getElementById('personalityReveal');
+                document.getElementById('personalityTitle').textContent = this.personalityResult.title;
+                document.getElementById('personalityDescription').textContent = this.personalityResult.description;
+                
+                const stats = `
+                    <strong>Your Mind Profile:</strong><br>
+                    🎯 Accuracy: ${this.personalityResult.stats.accuracy}%<br>
+                    ⏱️ Avg Response: ${this.personalityResult.stats.avgTime}s<br>
+                    🔄 Retries: ${this.personalityResult.stats.retries}<br>
+                    ⭐ Final Score: ${this.personalityResult.stats.score}
+                `;
+                
+                document.getElementById('personalityStats').innerHTML = stats;
+                reveal.classList.remove('hidden');
+                
+                // Animate the reveal
+                gsap.fromTo(reveal, 
+                    { scale: 0.8, opacity: 0 },
+                    { scale: 1, opacity: 1, duration: 1, ease: "back.out(1.7)" }
+                );
+            }
+            
+            handleClick(e) {
+                // Handle canvas interactions if needed
+            }
+            
+            handleTouch(e) {
+                e.preventDefault();
+                // Handle touch interactions if needed
+            }
+            
+            gameLoop() {
+                this.update();
+                this.render();
+                requestAnimationFrame(() => this.gameLoop());
+            }
+            
+            update() {
+                // Update particles
+                this.particles = this.particles.filter(particle => {
+                    particle.x += particle.vx;
+                    particle.y += particle.vy;
+                    particle.life--;
+                    particle.vy += 0.1; // gravity
+                    return particle.life > 0;
+                });
+                
+                // Update background particles
+                this.backgroundParticles.forEach(particle => {
+                    particle.x += particle.vx;
+                    particle.y += particle.vy;
+                    
+                    if(particle.x < 0 || particle.x > this.canvas.width) particle.vx *= -1;
+                    if(particle.y < 0 || particle.y > this.canvas.height) particle.vy *= -1;
+                });
+            }
+            
+            render() {
+                // Clear canvas
+                this.ctx.fillStyle = 'rgba(26, 26, 46, 0.1)';
+                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                // Draw background particles
+                this.backgroundParticles.forEach(particle => {
+                    this.ctx.save();
+                    this.ctx.globalAlpha = particle.opacity;
+                    this.ctx.fillStyle = '#4ecdc4';
+                    this.ctx.beginPath();
+                    this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                    this.ctx.fill();
+                    this.ctx.restore();
+                });
+                
+                // Draw game particles
+                this.particles.forEach(particle => {
+                    this.ctx.save();
+                    this.ctx.globalAlpha = particle.life / particle.maxLife;
+                    this.ctx.fillStyle = particle.color;
+                    this.ctx.beginPath();
+                    this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                    this.ctx.fill();
+                    this.ctx.restore();
+                });
+                
+                // Draw mystical background effects
+                if(this.state === 'playing') {
+                    this.drawMysticalEffects();
+                }
+            }
+            
+            drawMysticalEffects() {
+                const time = Date.now() * 0.001;
+                
+                // Draw floating runes
+                this.ctx.save();
+                this.ctx.globalAlpha = 0.3;
+                this.ctx.fillStyle = '#4ecdc4';
+                this.ctx.font = '20px Arial';
+                
+                const runes = ['ᚱ', 'ᚢ', 'ᚾ', 'ᛖ', '⚡', '🌟', '🔮'];
+                for(let i = 0; i < 5; i++) {
+                    const x = Math.sin(time + i) * 100 + this.canvas.width / 2;
+                    const y = Math.cos(time * 0.7 + i) * 50 + this.canvas.height / 4;
+                    this.ctx.fillText(runes[i % runes.length], x, y);
+                }
+                
+                this.ctx.restore();
+            }
+        }
+        
+        // Initialize game
+        const game = new CipherMind();
+        
+        // Keyboard support
+        document.addEventListener('keydown', (e) => {
+            if(game.state === 'playing') {
+                const key = parseInt(e.key);
+                if(key >= 1 && key <= 4) {
+                    game.selectAnswer(key - 1);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+    </div>
+    <div class="watermark">GameCraft AI</div>
+    
+    <script>
+        // Prevent zooming on mobile
+        document.addEventListener('gesturestart', function (e) {
+            e.preventDefault();
+        });
+        
+        document.addEventListener('gesturechange', function (e) {
+            e.preventDefault();
+        });
+        
+        document.addEventListener('gestureend', function (e) {
+            e.preventDefault();
+        });
+        
+        // Game analytics (optional)
+        console.log('Game ID: game_1753702200066_dy7dut4p71u');
+        console.log('Theme: Cipher Mind');
+        console.log('Generated at: 2025-07-28T11:30:00.067Z');
+    </script>
+</body>
+</html>
