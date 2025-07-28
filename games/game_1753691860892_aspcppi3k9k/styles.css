@@ -1,0 +1,118 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: #1a1a2e;
+    color: #fff;
+}
+
+#game-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+#gameCanvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#ui-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.screen {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    pointer-events: auto;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 2rem;
+    border-radius: 1rem;
+}
+
+.hidden {
+    display: none;
+}
+
+button {
+    background: #4a90e2;
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    margin: 1rem;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background: #357abd;
+    transform: scale(1.05);
+}
+
+#riddle-display {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    line-height: 1.4;
+}
+
+#answer-input {
+    margin: 1rem 0;
+}
+
+#playerAnswer {
+    padding: 0.5rem;
+    font-size: 1.2rem;
+    border-radius: 0.3rem;
+    border: 2px solid #4a90e2;
+    margin-right: 0.5rem;
+}
+
+#score, #timer {
+    position: absolute;
+    top: 1rem;
+    padding: 0.5rem 1rem;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 0.3rem;
+}
+
+#score {
+    left: 1rem;
+}
+
+#timer {
+    right: 1rem;
+}
+
+@media (max-width: 768px) {
+    .screen {
+        width: 90%;
+        padding: 1rem;
+    }
+
+    #riddle-display {
+        font-size: 1.2rem;
+    }
+
+    button {
+        padding: 0.8rem 1.6rem;
+        font-size: 1rem;
+    }
+}
