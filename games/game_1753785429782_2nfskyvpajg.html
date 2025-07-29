@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Egg Rush - Farm Teaser - AI Generated Game</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #000;
+            font-family: 'Outfit', system-ui, sans-serif;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        .game-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: manipulation;
+            -webkit-overflow-scrolling: touch;
+        }
+        .watermark {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            color: rgba(255,255,255,0.3);
+            font-size: 10px;
+            z-index: 1000;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Egg Rush - Farm Teaser</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            overflow: hidden;
+            background: #87CEEB;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            padding-top: env(safe-area-inset-top);
+            padding-right: env(safe-area-inset-right);
+            padding-bottom: env(safe-area-inset-bottom);
+            padding-left: env(safe-area-inset-left);
+        }
+
+        #gameContainer {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #gameCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+
+        #instructionScreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #FFE4B5 0%, #FFA07A 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 1;
+            transition: opacity 0.5s ease-out;
+        }
+
+        #instructionScreen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #instructionSVG {
+            width: 100%;
+            height: 100%;
+            max-width: 600px;
+            max-height: 600px;
+        }
+
+        #hud {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 50;
+            pointer-events: none;
+        }
+
+        .hudElement {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 18px;
+            color: #333;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            animation: hudBreathe 2s ease-in-out infinite;
+        }
+
+        @keyframes hudBreathe {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        #resultScreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease-out;
+            padding: 40px;
+            text-align: center;
+        }
+
+        #resultScreen.visible {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .resultTitle {
+            font-size: clamp(24px, 5vw, 48px);
+            color: white;
+            margin-bottom: 20px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            animation: slideInTop 0.8s ease-out;
+        }
+
+        .personalityType {
+            font-size: clamp(32px, 6vw, 64px);
+            color: #FFD700;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            animation: scaleIn 0.6s ease-out 0.3s both;
+        }
+
+        .personalityDesc {
+            font-size: clamp(16px, 3vw, 24px);
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 500px;
+            line-height: 1.6;
+            animation: fadeIn 0.8s ease-out 0.6s both;
+        }
+
+        .handPreference {
+            font-size: clamp(14px, 2.5vw, 20px);
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 20px;
+            animation: fadeIn 0.8s ease-out 0.8s both;
+        }
+
+        @keyframes slideInTop {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .particle {
+            position: absolute;
+            pointer-events: none;
+            border-radius: 50%;
+        }
+
+        .scorePopup {
+            position: absolute;
+            font-weight: bold;
+            font-size: 24px;
+            color: #FFD700;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            pointer-events: none;
+            z-index: 60;
+        }
+
+        .comboIndicator {
+            position: absolute;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 32px;
+            font-weight: bold;
+            color: #FF6B6B;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            z-index: 60;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <canvas id="gameCanvas"></canvas>
+        
+        <div id="hud">
+            <div class="hudElement" id="score">Score: 0</div>
+            <div class="hudElement" id="timer">30s</div>
+        </div>
+        
+        <div class="comboIndicator" id="combo"></div>
+        
+        <div id="instructionScreen">
+            <svg id="instructionSVG" viewBox="0 0 600 600" preserveAspectRatio="xMidYMid slice">
+                <defs>
+                    <linearGradient id="eggGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#F0E68C;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                
+                <rect width="600" height="600" fill="none"/>
+                
+                <text x="300" y="100" text-anchor="middle" font-size="48" font-weight="bold" fill="#8B4513">
+                    Egg Rush!
+                </text>
+                
+                <g id="chickenGroup" transform="translate(300, 300)">
+                    <ellipse cx="0" cy="0" rx="60" ry="50" fill="#CD853F" stroke="#8B4513" stroke-width="3"/>
+                    <circle cx="-20" cy="-10" r="8" fill="#000"/>
+                    <circle cx="20" cy="-10" r="8" fill="#000"/>
+                    <path d="M -10 5 Q 0 15 10 5" fill="none" stroke="#8B4513" stroke-width="3"/>
+                    <path d="M -30 -30 Q -20 -50 -10 -30" fill="#FF6347" stroke="#8B4513" stroke-width="2"/>
+                </g>
+                
+                <g id="eggGroup" transform="translate(300, 400)">
+                    <ellipse cx="0" cy="0" rx="30" ry="40" fill="url(#eggGradient)" stroke="#8B4513" stroke-width="2"/>
+                </g>
+                
+                <text x="300" y="480" text-anchor="middle" font-size="24" fill="#8B4513">
+                    Tap chickens to collect eggs!
+                </text>
+                
+                <text x="300" y="520" text-anchor="middle" font-size="20" fill="#666">
+                    Be quick - you have 30 seconds!
+                </text>
+                
+                <rect x="200" y="540" width="200" height="50" rx="25" fill="#4CAF50" stroke="#2E7D32" stroke-width="3" style="cursor: pointer;" onclick="startGame()"/>
+                <text x="300" y="570" text-anchor="middle" font-size="24" font-weight="bold" fill="white" pointer-events="none">
+                    START
+                </text>
+            </svg>
+        </div>
+        
+        <div id="resultScreen">
+            <h2 class="resultTitle">Your Farm Personality</h2>
+            <h1 class="personalityType" id="personalityType"></h1>
+            <p class="personalityDesc" id="personalityDesc"></p>
+            <p class="handPreference" id="handPreference"></p>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        class EggRushGame {
+            constructor() {
+                this.canvas = document.getElementById('gameCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.container = document.getElementById('gameContainer');
+                
+                this.state = 'menu';
+                this.score = 0;
+                this.timeLeft = 30;
+                this.combo = 0;
+                this.lastEggTime = 0;
+                
+                this.chickens = [];
+                this.eggs = [];
+                this.particles = [];
+                this.clouds = [];
+                
+                this.behaviorData = {
+                    totalClicks: 0,
+                    leftClicks: 0,
+                    rightClicks: 0,
+                    reactionTimes: [],
+                    missClicks: 0,
+                    maxCombo: 0,
+                    avgClickSpeed: 0,
+                    startTime: 0,
+                    endTime: 0
+                };
+                
+                this.init();
+            }
+            
+            init() {
+                this.setupCanvas();
+                this.setupEventListeners();
+                this.createClouds();
+                this.animate();
+                
+                gsap.to('#chickenGroup', {
+                    y: '+=10',
+                    duration: 1,
+                    ease: 'power1.inOut',
+                    yoyo: true,
+                    repeat: -1
+                });
+                
+                gsap.to('#eggGroup', {
+                    rotation: 10,
+                    duration: 2,
+                    ease: 'power1.inOut',
+                    yoyo: true,
+                    repeat: -1,
+                    transformOrigin: 'center bottom'
+                });
+            }
+            
+            setupCanvas() {
+                const resize = () => {
+                    const rect = this.container.getBoundingClientRect();
+                    this.canvas.width = rect.width;
+                    this.canvas.height = rect.height;
+                    this.width = rect.width;
+                    this.height = rect.height;
+                };
+                
+                resize();
+                window.addEventListener('resize', resize);
+                
+                if (window.ResizeObserver) {
+                    new ResizeObserver(resize).observe(this.container);
+                }
+            }
+            
+            setupEventListeners() {
+                const handleInput = (x, y) => {
+                    if (this.state !== 'playing') return;
+                    
+                    this.behaviorData.totalClicks++;
+                    
+                    if (x < this.width / 2) {
+                        this.behaviorData.leftClicks++;
+                    } else {
+                        this.behaviorData.rightClicks++;
+                    }
+                    
+                    let hit = false;
+                    for (let chicken of this.chickens) {
+                        const dist = Math.hypot(x - chicken.x, y - chicken.y);
+                        if (dist < chicken.size && !chicken.laying) {
+                            this.collectEgg(chicken);
+                            hit = true;
+                            break;
+                        }
+                    }
+                    
+                    if (!hit) {
+                        this.behaviorData.missClicks++;
+                    }
+                };
+                
+                this.canvas.addEventListener('click', (e) => {
+                    const rect = this.canvas.getBoundingClientRect();
+                    handleInput(e.clientX - rect.left, e.clientY - rect.top);
+                });
+                
+                this.canvas.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    const rect = this.canvas.getBoundingClientRect();
+                    const touch = e.touches[0];
+                    handleInput(touch.clientX - rect.left, touch.clientY - rect.top);
+                });
+            }
+            
+            startGame() {
+                this.state = 'playing';
+                this.behaviorData.startTime = Date.now();
+                
+                document.getElementById('instructionScreen').classList.add('hidden');
+                
+                this.createChickens();
+                this.startTimer();
+            }
+            
+            createChickens() {
+                const chickenCount = Math.min(6, Math.floor(this.width / 150));
+                
+                for (let i = 0; i < chickenCount; i++) {
+                    this.chickens.push({
+                        x: Math.random() * (this.width - 100) + 50,
+                        y: Math.random() * (this.height - 200) + 100,
+                        size: 40,
+                        laying: false,
+                        layTimer: 0,
+                        speed: 1 + Math.random() * 2,
+                        direction: Math.random() * Math.PI * 2,
+                        wingFlap: 0
+                    });
+                }
+            }
+            
+            createClouds() {
+                for (let i = 0; i < 5; i++) {
+                    this.clouds.push({
+                        x: Math.random() * this.width,
+                        y: Math.random() * (this.height * 0.3),
+                        size: 60 + Math.random() * 40,
+                        speed: 0.2 + Math.random() * 0.3
+                    });
+                }
+            }
+            
+            collectEgg(chicken) {
+                const now = Date.now();
+                if (this.lastEggTime > 0) {
+                    this.behaviorData.reactionTimes.push(now - this.lastEggTime);
+                }
+                this.lastEggTime = now;
+                
+                chicken.laying = true;
+                chicken.layTimer = 60;
+                
+                this.score += 10;
+                this.combo++;
+                this.behaviorData.maxCombo = Math.max(this.behaviorData.maxCombo, this.combo);
+                
+                document.getElementById('score').textContent = `Score: ${this.score}`;
+                
+                this.createScorePopup(chicken.x, chicken.y, '+10');
+                this.createParticles(chicken.x, chicken.y, '#FFD700');
+                
+                if (this.combo > 2) {
+                    this.showCombo();
+                }
+                
+                gsap.to(chicken, {
+                    size: chicken.size * 1.3,
+                    duration: 0.2,
+                    ease: 'back.out',
+                    yoyo: true,
+                    repeat: 1
+                });
+                
+                this.eggs.push({
+                    x: chicken.x,
+                    y: chicken.y + chicken.size,
+                    vy: 0,
+                    collected: false,
+                    rotation: 0
+                });
+            }
+            
+            createScorePopup(x, y, text) {
+                const popup = document.createElement('div');
+                popup.className = 'scorePopup';
+                popup.textContent = text;
+                popup.style.left = x + 'px';
+                popup.style.top = y + 'px';
+                document.getElementById('gameContainer').appendChild(popup);
+                
+                gsap.to(popup, {
+                    y: -50,
+                    opacity: 0,
+                    duration: 1,
+                    ease: 'power2.out',
+                    onComplete: () => popup.remove()
+                });
+            }
+            
+            createParticles(x, y, color) {
+                for (let i = 0; i < 10; i++) {
+                    this.particles.push({
+                        x: x,
+                        y: y,
+                        vx: (Math.random() - 0.5) * 10,
+                        vy: (Math.random() - 0.5) * 10,
+                        size: 3 + Math.random() * 5,
+                        color: color,
+                        life: 1
+                    });
+                }
+            }
+            
+            showCombo() {
+                const comboEl = document.getElementById('combo');
+                comboEl.textContent = `${this.combo}x COMBO!`;
+                
+                gsap.set(comboEl, { opacity: 1, scale: 0 });
+                gsap.to(comboEl, {
+                    scale: 1.2,
+                    duration: 0.3,
+                    ease: 'back.out'
+                });
+                gsap.to(comboEl, {
+                    scale: 1,
+                    opacity: 0,
+                    duration: 0.3,
+                    delay: 0.5
+                });
+            }
+            
+            startTimer() {
+                const timerInterval = setInterval(() => {
+                    this.timeLeft--;
+                    document.getElementById('timer').textContent = `${this.timeLeft}s`;
+                    
+                    if (this.timeLeft <= 0) {
+                        clearInterval(timerInterval);
+                        this.endGame();
+                    }
+                }, 1000);
+            }
+            
+            endGame() {
+                this.state = 'ended';
+                this.behaviorData.endTime = Date.now();
+                
+                const personality = this.calculatePersonality();
+                this.showResults(personality);
+            }
+            
+            calculatePersonality() {
+                const totalTime = (this.behaviorData.endTime - this.behaviorData.startTime) / 1000;
+                const clicksPerSecond = this.behaviorData.totalClicks / totalTime;
+                const accuracy = 1 - (this.behaviorData.missClicks / this.behaviorData.totalClicks);
+                const avgReaction = this.behaviorData.reactionTimes.length > 0 
+                    ? this.behaviorData.reactionTimes.reduce((a, b) => a + b, 0) / this.behaviorData.reactionTimes.length 
+                    : 1000;
+                
+                const leftRatio = this.behaviorData.leftClicks / this.behaviorData.totalClicks;
+                let handPreference = 'Ambidextrous';
+                if (leftRatio > 0.65) handPreference = 'Left-handed';
+                else if (leftRatio < 0.35) handPreference = 'Right-handed';
+                
+                let type, description;
+                
+                if (clicksPerSecond > 2 && accuracy > 0.8) {
+                    type = 'Lightning Farmer';
+                    description = 'Your quick reflexes and precision make you a master of efficiency. You tackle challenges head-on with remarkable speed and accuracy.';
+                } else if (this.behaviorData.maxCombo > 5) {
+                    type = 'Rhythm Master';
+                    description = 'You have a natural sense of flow and timing. Your ability to maintain streaks shows great focus and consistency.';
+                } else if (accuracy > 0.9) {
+                    type = 'Precision Harvester';
+                    description = 'Patient and methodical, you value quality over quantity. Your careful approach ensures nothing is wasted.';
+                } else if (clicksPerSecond > 2.5) {
+                    type = 'Energetic Explorer';
+                    description = 'Your enthusiasm is contagious! You approach life with boundless energy and aren\'t afraid to make mistakes along the way.';
+                } else {
+                    type = 'Zen Gardener';
+                    description = 'Calm and collected, you take life at your own pace. Your thoughtful approach brings balance to everything you do.';
+                }
+                
+                return { type, description, handPreference };
+            }
+            
+            showResults(personality) {
+                document.getElementById('personalityType').textContent = personality.type;
+                document.getElementById('personalityDesc').textContent = personality.description;
+                document.getElementById('handPreference').textContent = `Detected preference: ${personality.handPreference}`;
+                document.getElementById('resultScreen').classList.add('visible');
+                
+                for (let i = 0; i < 20; i++) {
+                    setTimeout(() => {
+                        this.createParticles(
+                            Math.random() * this.width,
+                            this.height,
+                            ['#FFD700', '#FF69B4', '#87CEEB'][Math.floor(Math.random() * 3)]
+                        );
+                    }, i * 100);
+                }
+            }
+            
+            update() {
+                if (this.state !== 'playing') return;
+                
+                // Update chickens
+                for (let chicken of this.chickens) {
+                    if (!chicken.laying) {
+                        chicken.x += Math.cos(chicken.direction) * chicken.speed;
+                        chicken.y += Math.sin(chicken.direction) * chicken.speed;
+                        
+                        if (chicken.x < chicken.size || chicken.x > this.width - chicken.size) {
+                            chicken.direction = Math.PI - chicken.direction;
+                        }
+                        if (chicken.y < chicken.size || chicken.y > this.height - chicken.size * 2) {
+                            chicken.direction = -chicken.direction;
+                        }
+                        
+                        chicken.x = Math.max(chicken.size, Math.min(this.width - chicken.size, chicken.x));
+                        chicken.y = Math.max(chicken.size, Math.min(this.height - chicken.size * 2, chicken.y));
+                    } else {
+                        chicken.layTimer--;
+                        if (chicken.layTimer <= 0) {
+                            chicken.laying = false;
+                        }
+                    }
+                    
+                    chicken.wingFlap += 0.2;
+                }
+                
+                // Update eggs
+                for (let egg of this.eggs) {
+                    if (!egg.collected) {
+                        egg.vy += 0.5;
+                        egg.y += egg.vy;
+                        egg.rotation += 0.1;
+                        
+                        if (egg.y > this.height) {
+                            egg.collected = true;
+                            this.combo = 0;
+                        }
+                    }
+                }
+                
+                // Update particles
+                this.particles = this.particles.filter(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vy += 0.3;
+                    p.life -= 0.02;
+                    return p.life > 0;
+                });
+                
+                // Update clouds
+                for (let cloud of this.clouds) {
+                    cloud.x += cloud.speed;
+                    if (cloud.x > this.width + cloud.size) {
+                        cloud.x = -cloud.size;
+                    }
+                }
+            }
+            
+            draw() {
+                // Clear canvas
+                this.ctx.fillStyle = '#87CEEB';
+                this.ctx.fillRect(0, 0, this.width, this.height);
+                
+                // Draw clouds
+                this.ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+                for (let cloud of this.clouds) {
+                    this.ctx.beginPath();
+                    this.ctx.arc(cloud.x, cloud.y, cloud.size * 0.6, 0, Math.PI * 2);
+                    this.ctx.arc(cloud.x - cloud.size * 0.4, cloud.y, cloud.size * 0.4, 0, Math.PI * 2);
+                    this.ctx.arc(cloud.x + cloud.size * 0.4, cloud.y, cloud.size * 0.4, 0, Math.PI * 2);
+                    this.ctx.fill();
+                }
+                
+                // Draw ground
+                this.ctx.fillStyle = '#90EE90';
+                this.ctx.fillRect(0, this.height - 50, this.width, 50);
+                
+                // Draw chickens
+                for (let chicken of this.chickens) {
+                    this.ctx.save();
+                    this.ctx.translate(chicken.x, chicken.y);
+                    
+                    // Body
+                    this.ctx.fillStyle = chicken.laying ? '#FFD700' : '#CD853F';
+                    this.ctx.beginPath();
+                    this.ctx.ellipse(0, 0, chicken.size, chicken.size * 0.8, 0, 0, Math.PI * 2);
+                    this.ctx.fill();
+                    
+                    // Wings
+                    const wingOffset = Math.sin(chicken.wingFlap) * 5;
+                    this.ctx.fillStyle = '#8B4513';
+                    this.ctx.beginPath();
+                    this.ctx.ellipse(-chicken.size * 0.7, wingOffset, chicken.size * 0.3, chicken.size * 0.5, -0.5, 0, Math.PI * 2);
+                    this.ctx.ellipse(chicken.size * 0.7, wingOffset, chicken.size * 0.3, chicken.size * 0.5, 0.5, 0, Math.PI * 2);
+                    this.ctx.fill();
+                    
+                    // Eyes
+                    this.ctx.fillStyle = '#000';
+                    this.ctx.beginPath();
+                    this.ctx.arc(-chicken.size * 0.3, -chicken.size * 0.2, 4, 0, Math.PI * 2);
+                    this.ctx.arc(chicken.size * 0.3, -chicken.size * 0.2, 4, 0, Math.PI * 2);
+                    this.ctx.fill();
+                    
+                    // Beak
+                    this.ctx.fillStyle = '#FFA500';
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(0, 0);
+                    this.ctx.lineTo(-8, 5);
+                    this.ctx.lineTo(8, 5);
+                    this.ctx.closePath();
+                    this.ctx.fill();
+                    
+                    // Comb
+                    this.ctx.fillStyle = '#FF6347';
+                    this.ctx.beginPath();
+                    this.ctx.arc(-chicken.size * 0.2, -chicken.size * 0.6, 8, 0, Math.PI * 2);
+                    this.ctx.arc(0, -chicken.size * 0.7, 10, 0, Math.PI * 2);
+                    this.ctx.arc(chicken.size * 0.2, -chicken.size * 0.6, 8, 0, Math.PI * 2);
+                    this.ctx.fill();
+                    
+                    this.ctx.restore();
+                }
+                
+                // Draw eggs
+                for (let egg of this.eggs) {
+                    if (!egg.collected) {
+                        this.ctx.save();
+                        this.ctx.translate(egg.x, egg.y);
+                        this.ctx.rotate(egg.rotation);
+                        
+                        const gradient = this.ctx.createRadialGradient(0, 0, 0, 0, 0, 20);
+                        gradient.addColorStop(0, '#FFFFFF');
+                        gradient.addColorStop(1, '#F0E68C');
+                        
+                        this.ctx.fillStyle = gradient;
+                        this.ctx.beginPath();
+                        this.ctx.ellipse(0, 0, 15, 20, 0, 0, Math.PI * 2);
+                        this.ctx.fill();
+                        
+                        this.ctx.strokeStyle = '#8B4513';
+                        this.ctx.lineWidth = 2;
+                        this.ctx.stroke();
+                        
+                        this.ctx.restore();
+                    }
+                }
+                
+                // Draw particles
+                for (let particle of this.particles) {
+                    this.ctx.globalAlpha = particle.life;
+                    this.ctx.fillStyle = particle.color;
+                    this.ctx.beginPath();
+                    this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                    this.ctx.fill();
+                }
+                this.ctx.globalAlpha = 1;
+            }
+            
+            animate() {
+                this.update();
+                this.draw();
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+        
+        let game;
+        
+        function startGame() {
+            if (!game) {
+                game = new EggRushGame();
+            }
+            game.startGame();
+        }
+        
+        window.onload = () => {
+            game = new EggRushGame();
+        };
+    </script>
+</body>
+</html>
+    </div>
+    <div class="watermark">GameCraft AI</div>
+    
+    <script>
+        // Prevent zooming on mobile
+        document.addEventListener('gesturestart', function (e) {
+            e.preventDefault();
+        });
+        
+        document.addEventListener('gesturechange', function (e) {
+            e.preventDefault();
+        });
+        
+        document.addEventListener('gestureend', function (e) {
+            e.preventDefault();
+        });
+        
+        // Game analytics (optional)
+        console.log('Game ID: game_1753785429782_2nfskyvpajg');
+        console.log('Theme: Egg Rush - Farm Teaser');
+        console.log('Generated at: 2025-07-29T10:37:09.783Z');
+    </script>
+</body>
+</html>
