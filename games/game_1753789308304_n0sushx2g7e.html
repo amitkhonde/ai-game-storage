@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Word Master - AI Generated Game</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #000;
+            font-family: 'Outfit', system-ui, sans-serif;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        .game-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: manipulation;
+            -webkit-overflow-scrolling: touch;
+        }
+        .watermark {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            color: rgba(255,255,255,0.3);
+            font-size: 10px;
+            z-index: 1000;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Word Master</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+
+        #gameContainer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+        }
+
+        #instructionScreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(10, 10, 10, 0.95);
+            z-index: 1000;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        #instructionScreen svg {
+            width: 100%;
+            height: 100%;
+            max-width: 400px;
+            max-height: 600px;
+        }
+
+        #gameBoard {
+            display: grid;
+            gap: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .tile {
+            width: 50px;
+            height: 50px;
+            border: 2px solid #3a3a3c;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            text-transform: uppercase;
+            background: #121213;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+        }
+
+        .tile.flip {
+            animation: flipTile 0.6s ease-in-out;
+        }
+
+        @keyframes flipTile {
+            0% { transform: rotateX(0); }
+            50% { transform: rotateX(90deg); }
+            100% { transform: rotateX(0); }
+        }
+
+        .tile.correct {
+            background: #538d4e;
+            border-color: #538d4e;
+        }
+
+        .tile.present {
+            background: #b59f3b;
+            border-color: #b59f3b;
+        }
+
+        .tile.absent {
+            background: #3a3a3c;
+            border-color: #3a3a3c;
+        }
+
+        #keyboard {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 0 8px;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .keyboard-row {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+        }
+
+        .key {
+            background: #818384;
+            border: none;
+            border-radius: 4px;
+            color: #ffffff;
+            font-size: 13px;
+            font-weight: bold;
+            padding: 0;
+            height: 48px;
+            min-width: 32px;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.1s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .key:active {
+            transform: scale(0.95);
+            background: #565758;
+        }
+
+        .key.wide {
+            flex: 1.5;
+        }
+
+        .key.correct {
+            background: #538d4e;
+        }
+
+        .key.present {
+            background: #b59f3b;
+        }
+
+        .key.absent {
+            background: #3a3a3c;
+        }
+
+        #timer {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #818384;
+            z-index: 100;
+        }
+
+        #score {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #538d4e;
+            z-index: 100;
+        }
+
+        #resultScreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(10, 10, 10, 0.98);
+            z-index: 2000;
+            flex-direction: column;
+            padding: 40px;
+            text-align: center;
+        }
+
+        #personalityTitle {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #538d4e, #b59f3b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        #personalityDesc {
+            font-size: 18px;
+            color: #818384;
+            max-width: 400px;
+            line-height: 1.6;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #538d4e;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particleFade 1s ease-out forwards;
+        }
+
+        @keyframes particleFade {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--dx), var(--dy)) scale(0);
+                opacity: 0;
+            }
+        }
+
+        .shake {
+            animation: shake 0.3s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        #lengthSelector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .length-btn {
+            background: #818384;
+            border: none;
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .length-btn:hover {
+            background: #565758;
+            transform: translateY(-2px);
+        }
+
+        .length-btn.selected {
+            background: #538d4e;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <div id="timer">30</div>
+        <div id="score">Score: 0</div>
+        
+        <div id="instructionScreen">
+            <svg viewBox="0 0 400 600" preserveAspectRatio="xMidYMid slice">
+                <defs>
+                    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#538d4e;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#b59f3b;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                
+                <rect width="400" height="600" fill="#0a0a0a"/>
+                
+                <text x="200" y="100" text-anchor="middle" fill="url(#grad1)" font-size="48" font-weight="bold">
+                    WORD MASTER
+                </text>
+                
+                <g transform="translate(200, 250)">
+                    <rect x="-30" y="-30" width="60" height="60" rx="8" fill="#538d4e" opacity="0">
+                        <animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="0.5s" fill="freeze"/>
+                        <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="20s" repeatCount="indefinite"/>
+                    </rect>
+                    <text x="0" y="8" text-anchor="middle" fill="white" font-size="32" font-weight="bold" opacity="0">
+                        A
+                        <animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="0.5s" fill="freeze"/>
+                    </text>
+                </g>
+                
+                <text x="200" y="350" text-anchor="middle" fill="#818384" font-size="18" opacity="0">
+                    Guess the word in 6 tries
+                    <animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="1s" fill="freeze"/>
+                </text>
+                
+                <text x="200" y="380" text-anchor="middle" fill="#818384" font-size="18" opacity="0">
+                    Green = correct position
+                    <animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="1.2s" fill="freeze"/>
+                </text>
+                
+                <text x="200" y="410" text-anchor="middle" fill="#818384" font-size="18" opacity="0">
+                    Yellow = wrong position
+                    <animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="1.4s" fill="freeze"/>
+                </text>
+                
+                <rect x="150" y="480" width="100" height="40" rx="20" fill="url(#grad1)" opacity="0" style="cursor: pointer" onclick="startGame()">
+                    <animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="2s" fill="freeze"/>
+                </rect>
+                <text x="200" y="505" text-anchor="middle" fill="white" font-size="16" font-weight="bold" opacity="0" style="pointer-events: none">
+                    TAP TO PLAY
+                    <animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="2s" fill="freeze"/>
+                </text>
+            </svg>
+        </div>
+        
+        <div id="lengthSelector" style="display: none;">
+            <button class="length-btn" data-length="3">3 Letters</button>
+            <button class="length-btn" data-length="4">4 Letters</button>
+            <button class="length-btn selected" data-length="5">5 Letters</button>
+            <button class="length-btn" data-length="6">6 Letters</button>
+        </div>
+        
+        <div id="gameBoard"></div>
+        
+        <div id="keyboard">
+            <div class="keyboard-row">
+                <button class="key" data-key="q">Q</button>
+                <button class="key" data-key="w">W</button>
+                <button class="key" data-key="e">E</button>
+                <button class="key" data-key="r">R</button>
+                <button class="key" data-key="t">T</button>
+                <button class="key" data-key="y">Y</button>
+                <button class="key" data-key="u">U</button>
+                <button class="key" data-key="i">I</button>
+                <button class="key" data-key="o">O</button>
+                <button class="key" data-key="p">P</button>
+            </div>
+            <div class="keyboard-row">
+                <button class="key" data-key="a">A</button>
+                <button class="key" data-key="s">S</button>
+                <button class="key" data-key="d">D</button>
+                <button class="key" data-key="f">F</button>
+                <button class="key" data-key="g">G</button>
+                <button class="key" data-key="h">H</button>
+                <button class="key" data-key="j">J</button>
+                <button class="key" data-key="k">K</button>
+                <button class="key" data-key="l">L</button>
+            </div>
+            <div class="keyboard-row">
+                <button class="key wide" data-key="enter">ENTER</button>
+                <button class="key" data-key="z">Z</button>
+                <button class="key" data-key="x">X</button>
+                <button class="key" data-key="c">C</button>
+                <button class="key" data-key="v">V</button>
+                <button class="key" data-key="b">B</button>
+                <button class="key" data-key="n">N</button>
+                <button class="key" data-key="m">M</button>
+                <button class="key wide" data-key="backspace">⌫</button>
+            </div>
+        </div>
+        
+        <div id="resultScreen">
+            <h1 id="personalityTitle"></h1>
+            <p id="personalityDesc"></p>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        class WordGame {
+            constructor() {
+                this.wordLength = 5;
+                this.maxGuesses = 6;
+                this.currentGuess = '';
+                this.currentRow = 0;
+                this.gameActive = false;
+                this.score = 0;
+                this.startTime = null;
+                this.behaviors = {
+                    reactionTimes: [],
+                    retries: 0,
+                    clicksPerSecond: [],
+                    totalClicks: 0,
+                    leftClicks: 0,
+                    rightClicks: 0,
+                    centerClicks: 0,
+                    persistence: 0,
+                    accuracy: 0,
+                    speed: 'normal'
+                };
+                
+                this.words = {
+                    3: ['CAT', 'DOG', 'RUN', 'FUN', 'SUN', 'BAT', 'HAT', 'RAT', 'MAT', 'SAT'],
+                    4: ['GAME', 'PLAY', 'WORD', 'TIME', 'FAST', 'SLOW', 'JUMP', 'WALK', 'TALK', 'LOOK'],
+                    5: ['QUICK', 'BROWN', 'FOXES', 'JUMPS', 'LASER', 'BRAIN', 'SMART', 'THINK', 'SOLVE', 'GUESS'],
+                    6: ['MASTER', 'PLAYER', 'GENIUS', 'PUZZLE', 'RIDDLE', 'ANSWER', 'TYPING', 'GAMING', 'WINNER', 'LOSER']
+                };
+                
+                this.currentWord = '';
+                this.guessedWords = [];
+                
+                this.init();
+            }
+            
+            init() {
+                this.setupEventListeners();
+                this.setupLengthSelector();
+            }
+            
+            setupLengthSelector() {
+                const buttons = document.querySelectorAll('.length-btn');
+                buttons.forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        buttons.forEach(b => b.classList.remove('selected'));
+                        btn.classList.add('selected');
+                        this.wordLength = parseInt(btn.dataset.length);
+                        this.resetGame();
+                    });
+                });
+            }
+            
+            setupEventListeners() {
+                document.querySelectorAll('.key').forEach(key => {
+                    key.addEventListener('click', (e) => {
+                        const keyValue = key.dataset.key;
+                        this.handleInput(keyValue);
+                        this.trackClick(e.clientX);
+                    });
+                });
+                
+                document.addEventListener('keydown', (e) => {
+                    if (!this.gameActive) return;
+                    
+                    if (e.key === 'Enter') {
+                        this.handleInput('enter');
+                    } else if (e.key === 'Backspace') {
+                        this.handleInput('backspace');
+                    } else if (/^[a-zA-Z]$/.test(e.key)) {
+                        this.handleInput(e.key.toLowerCase());
+                    }
+                });
+            }
+            
+            trackClick(x) {
+                this.behaviors.totalClicks++;
+                const screenWidth = window.innerWidth;
+                const third = screenWidth / 3;
+                
+                if (x < third) {
+                    this.behaviors.leftClicks++;
+                } else if (x > third * 2) {
+                    this.behaviors.rightClicks++;
+                } else {
+                    this.behaviors.centerClicks++;
+                }
+            }
+            
+            startGame() {
+                document.getElementById('instructionScreen').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('instructionScreen').style.display = 'none';
+                    document.getElementById('lengthSelector').style.display = 'flex';
+                }, 500);
+                
+                this.gameActive = true;
+                this.startTime = Date.now();
+                this.resetGame();
+                this.startTimer();
+            }
+            
+            resetGame() {
+                this.currentGuess = '';
+                this.currentRow = 0;
+                this.guessedWords = [];
+                this.currentWord = this.getRandomWord();
+                this.createBoard();
+            }
+            
+            getRandomWord() {
+                const wordList = this.words[this.wordLength];
+                return wordList[Math.floor(Math.random() * wordList.length)];
+            }
+            
+            createBoard() {
+                const board = document.getElementById('gameBoard');
+                board.innerHTML = '';
+                board.style.gridTemplateColumns = `repeat(${this.wordLength}, 1fr)`;
+                
+                for (let i = 0; i < this.maxGuesses * this.wordLength; i++) {
+                    const tile = document.createElement('div');
+                    tile.classList.add('tile');
+                    tile.id = `tile-${i}`;
+                    board.appendChild(tile);
+                }
+            }
+            
+            handleInput(key) {
+                if (!this.gameActive) return;
+                
+                const inputTime = Date.now();
+                if (this.lastInputTime) {
+                    this.behaviors.reactionTimes.push(inputTime - this.lastInputTime);
+                }
+                this.lastInputTime = inputTime;
+                
+                if (key === 'enter') {
+                    if (this.currentGuess.length === this.wordLength) {
+                        this.submitGuess();
+                    }
+                } else if (key === 'backspace') {
+                    if (this.currentGuess.length > 0) {
+                        this.currentGuess = this.currentGuess.slice(0, -1);
+                        this.updateBoard();
+                    }
+                } else if (this.currentGuess.length < this.wordLength) {
+                    this.currentGuess += key.toUpperCase();
+                    this.updateBoard();
+                    this.createParticle();
+                }
+            }
+            
+            updateBoard() {
+                const startIndex = this.currentRow * this.wordLength;
+                for (let i = 0; i < this.wordLength; i++) {
+                    const tile = document.getElementById(`tile-${startIndex + i}`);
+                    tile.textContent = this.currentGuess[i] || '';
+                    
+                    if (this.currentGuess[i]) {
+                        gsap.fromTo(tile, 
+                            { scale: 0.8 }, 
+                            { scale: 1, duration: 0.1, ease: "back.out(1.7)" }
+                        );
+                    }
+                }
+            }
+            
+            submitGuess() {
+                const guess = this.currentGuess;
+                const startIndex = this.currentRow * this.wordLength;
+                
+                let correctCount = 0;
+                
+                for (let i = 0; i < this.wordLength; i++) {
+                    const tile = document.getElementById(`tile-${startIndex + i}`);
+                    const letter = guess[i];
+                    const correctLetter = this.currentWord[i];
+                    
+                    setTimeout(() => {
+                        tile.classList.add('flip');
+                        
+                        setTimeout(() => {
+                            if (letter === correctLetter) {
+                                tile.classList.add('correct');
+                                this.updateKey(letter, 'correct');
+                                correctCount++;
+                                this.createParticleBurst(tile);
+                            } else if (this.currentWord.includes(letter)) {
+                                tile.classList.add('present');
+                                this.updateKey(letter, 'present');
+                            } else {
+                                tile.classList.add('absent');
+                                this.updateKey(letter, 'absent');
+                            }
+                        }, 300);
+                    }, i * 100);
+                }
+                
+                setTimeout(() => {
+                    if (guess === this.currentWord) {
+                        this.score += (this.maxGuesses - this.currentRow) * 10;
+                        document.getElementById('score').textContent = `Score: ${this.score}`;
+                        this.behaviors.accuracy = (this.behaviors.accuracy + 1) / 2;
+                        
+                        setTimeout(() => {
+                            this.currentWord = this.getRandomWord();
+                            this.resetGame();
+                        }, 1000);
+                    } else {
+                        this.currentRow++;
+                        this.currentGuess = '';
+                        
+                        if (this.currentRow >= this.maxGuesses) {
+                            this.behaviors.retries++;
+                            setTimeout(() => {
+                                this.currentWord = this.getRandomWord();
+                                this.resetGame();
+                            }, 1000);
+                        }
+                    }
+                }, this.wordLength * 100 + 500);
+            }
+            
+            updateKey(letter, status) {
+                const key = document.querySelector(`[data-key="${letter.toLowerCase()}"]`);
+                if (key && !key.classList.contains('correct')) {
+                    key.classList.add(status);
+                }
+            }
+            
+            createParticle() {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                particle.style.left = Math.random() * window.innerWidth + 'px';
+                particle.style.top = Math.random() * window.innerHeight + 'px';
+                particle.style.setProperty('--dx', (Math.random() - 0.5) * 100 + 'px');
+                particle.style.setProperty('--dy', (Math.random() - 0.5) * 100 + 'px');
+                document.body.appendChild(particle);
+                
+                setTimeout(() => particle.remove(), 1000);
+            }
+            
+            createParticleBurst(element) {
+                const rect = element.getBoundingClientRect();
+                for (let i = 0; i < 10; i++) {
+                    const particle = document.createElement('div');
+                    particle.classList.add('particle');
+                    particle.style.left = rect.left + rect.width / 2 + 'px';
+                    particle.style.top = rect.top + rect.height / 2 + 'px';
+                    particle.style.setProperty('--dx', (Math.random() - 0.5) * 200 + 'px');
+                    particle.style.setProperty('--dy', (Math.random() - 0.5) * 200 + 'px');
+                    document.body.appendChild(particle);
+                    
+                    setTimeout(() => particle.remove(), 1000);
+                }
+            }
+            
+            startTimer() {
+                let timeLeft = 30;
+                const timerElement = document.getElementById('timer');
+                
+                const interval = setInterval(() => {
+                    timeLeft--;
+                    timerElement.textContent = timeLeft;
+                    
+                    if (timeLeft <= 10) {
+                        timerElement.style.color = '#ff6b6b';
+                    }
+                    
+                    if (timeLeft <= 0) {
+                        clearInterval(interval);
+                        this.endGame();
+                    }
+                }, 1000);
+            }
+            
+            endGame() {
+                this.gameActive = false;
+                this.behaviors.persistence = Date.now() - this.startTime;
+                
+                const avgReactionTime = this.behaviors.reactionTimes.length > 0 
+                    ? this.behaviors.reactionTimes.reduce((a, b) => a + b) / this.behaviors.reactionTimes.length 
+                    : 1000;
+                
+                if (avgReactionTime < 300) this.behaviors.speed = 'lightning';
+                else if (avgReactionTime < 600) this.behaviors.speed = 'fast';
+                else if (avgReactionTime > 1000) this.behaviors.speed = 'methodical';
+                
+                const handPreference = this.detectHandPreference();
+                const personality = this.generatePersonality(handPreference);
+                
+                this.showResults(personality);
+            }
+            
+            detectHandPreference() {
+                const total = this.behaviors.leftClicks + this.behaviors.rightClicks + this.behaviors.centerClicks;
+                if (total === 0) return 'neutral';
+                
+                const leftRatio = this.behaviors.leftClicks / total;
+                const rightRatio = this.behaviors.rightClicks / total;
+                
+                if (leftRatio > 0.6) return 'left';
+                if (rightRatio > 0.6) return 'right';
+                return 'neutral';
+            }
+            
+            generatePersonality(handPreference) {
+                const personalities = [
+                    {
+                        title: "The Lightning Strategist",
+                        desc: `Your ${this.behaviors.speed} reflexes and ${handPreference}-handed preference reveal a mind that processes patterns at incredible speed. You scored ${this.score} points with surgical precision.`,
+                        condition: () => this.behaviors.speed === 'lightning' && this.score > 50
+                    },
+                    {
+                        title: "The Persistent Explorer",
+                        desc: `With ${this.behaviors.retries} retries and ${handPreference}-handed control, you show remarkable determination. Your ${this.score} points prove that persistence pays off.`,
+                        condition: () => this.behaviors.retries > 2
+                    },
+                    {
+                        title: "The Methodical Master",
+                        desc: `Your careful, ${this.behaviors.speed} approach and ${handPreference}-handed precision led to ${this.score} points. Quality over quantity is your mantra.`,
+                        condition: () => this.behaviors.speed === 'methodical'
+                    },
+                    {
+                        title: "The Balanced Achiever",
+                        desc: `Perfectly balanced between speed and accuracy, your ${handPreference}-handed style earned ${this.score} points. You embody the ideal player.`,
+                        condition: () => true
+                    }
+                ];
+                
+                return personalities.find(p => p.condition()) || personalities[personalities.length - 1];
+            }
+            
+            showResults(personality) {
+                const resultScreen = document.getElementById('resultScreen');
+                const title = document.getElementById('personalityTitle');
+                const desc = document.getElementById('personalityDesc');
+                
+                title.textContent = personality.title;
+                desc.textContent = personality.desc;
+                
+                resultScreen.style.display = 'flex';
+                
+                gsap.fromTo(resultScreen, 
+                    { opacity: 0, scale: 0.8 }, 
+                    { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.7)" }
+                );
+                
+                gsap.fromTo(title,
+                    { y: -50, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 0.8, delay: 0.3, ease: "power3.out" }
+                );
+                
+                gsap.fromTo(desc,
+                    { y: 50, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 0.8, delay: 0.5, ease: "power3.out" }
+                );
+                
+                for (let i = 0; i < 20; i++) {
+                    setTimeout(() => this.createParticle(), i * 50);
+                }
+            }
+        }
+        
+        const game = new WordGame();
+        
+        function startGame() {
+            game.startGame();
+        }
+        
+        window.addEventListener('resize', () => {
+            const container = document.getElementById('gameContainer');
+            container.style.width = window.innerWidth + 'px';
+            container.style.height = window.innerHeight + 'px';
+        });
+    </script>
+</body>
+</html>
+    </div>
+    <div class="watermark">GameCraft AI</div>
+    
+    <script>
+        // Prevent zooming on mobile
+        document.addEventListener('gesturestart', function (e) {
+            e.preventDefault();
+        });
+        
+        document.addEventListener('gesturechange', function (e) {
+            e.preventDefault();
+        });
+        
+        document.addEventListener('gestureend', function (e) {
+            e.preventDefault();
+        });
+        
+        // Game analytics (optional)
+        console.log('Game ID: game_1753789308304_n0sushx2g7e');
+        console.log('Theme: Word Master');
+        console.log('Generated at: 2025-07-29T11:41:48.304Z');
+    </script>
+</body>
+</html>
