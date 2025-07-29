@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Farm Rush Teaser - AI Generated Game</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #000;
+            font-family: 'Outfit', system-ui, sans-serif;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        .game-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: manipulation;
+            -webkit-overflow-scrolling: touch;
+        }
+        .watermark {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            color: rgba(255,255,255,0.3);
+            font-size: 10px;
+            z-index: 1000;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Farm Rush Teaser</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            background: linear-gradient(135deg, #87CEEB 0%, #98FB98 100%);
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        
+        #gameContainer {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #gameCanvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            touch-action: none;
+        }
+        
+        #instructionPanel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #instructionSVG {
+            width: 100%;
+            height: 100%;
+            max-width: 600px;
+            max-height: 400px;
+        }
+        
+        #ui {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        #score, #timer {
+            background: rgba(0,0,0,0.3);
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 18px;
+        }
+        
+        #resultsPanel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 100%);
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        #personalityTitle {
+            font-size: clamp(24px, 6vw, 48px);
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        #personalityDescription {
+            font-size: clamp(14px, 4vw, 20px);
+            line-height: 1.6;
+            max-width: 600px;
+            margin-bottom: 20px;
+        }
+        
+        #statsDisplay {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 15px;
+            font-size: clamp(12px, 3vw, 16px);
+        }
+        
+        .breathing {
+            animation: breathe 2s ease-in-out infinite;
+        }
+        
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        @media (max-width: 480px) {
+            #ui {
+                top: 10px;
+                left: 10px;
+                right: 10px;
+            }
+            
+            #score, #timer {
+                padding: 8px 12px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <canvas id="gameCanvas"></canvas>
+        
+        <div id="ui">
+            <div id="score">Score: 0</div>
+            <div id="timer">30s</div>
+        </div>
+        
+        <div id="instructionPanel">
+            <svg id="instructionSVG" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet">
+                <defs>
+                    <linearGradient id="skyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" style="stop-color:#87CEEB"/>
+                        <stop offset="100%" style="stop-color:#98FB98"/>
+                    </linearGradient>
+                </defs>
+                
+                <rect width="400" height="300" fill="url(#skyGradient)"/>
+                
+                <!-- Farm background -->
+                <rect x="0" y="200" width="400" height="100" fill="#8B4513"/>
+                <rect x="50" y="150" width="80" height="50" fill="#DC143C" rx="5"/>
+                <polygon points="50,150 90,120 130,150" fill="#8B0000"/>
+                
+                <!-- Animated crops -->
+                <g id="crops">
+                    <circle cx="200" cy="220" r="8" fill="#FF6347">
+                        <animateTransform attributeName="transform" type="scale" 
+                            values="1;1.2;1" dur="1s" repeatCount="indefinite"/>
+                    </circle>
+                    <circle cx="230" cy="210" r="8" fill="#FF6347">
+                        <animateTransform attributeName="transform" type="scale" 
+                            values="1;1.2;1" dur="1.2s" repeatCount="indefinite"/>
+                    </circle>
+                    <circle cx="260" cy="225" r="8" fill="#FF6347">
+                        <animateTransform attributeName="transform" type="scale" 
+                            values="1;1.2;1" dur="0.8s" repeatCount="indefinite"/>
+                    </circle>
+                </g>
+                
+                <!-- Instruction text -->
+                <text x="200" y="80" text-anchor="middle" font-family="Arial" font-size="24" font-weight="bold" fill="#2F4F4F">
+                    Farm Rush!
+                </text>
+                <text x="200" y="110" text-anchor="middle" font-family="Arial" font-size="16" fill="#2F4F4F">
+                    Tap the ripe crops as fast as you can!
+                </text>
+                <text x="200" y="130" text-anchor="middle" font-family="Arial" font-size="14" fill="#2F4F4F">
+                    Tap anywhere to start
+                </text>
+                
+                <!-- Animated hand pointer -->
+                <g id="pointer" opacity="0.8">
+                    <circle cx="250" cy="200" r="15" fill="none" stroke="#FFD700" stroke-width="3">
+                        <animate attributeName="r" values="15;25;15" dur="1.5s" repeatCount="indefinite"/>
+                        <animate attributeName="opacity" values="0.8;0.3;0.8" dur="1.5s" repeatCount="indefinite"/>
+                    </circle>
+                </g>
+            </svg>
+        </div>
+        
+        <div id="resultsPanel">
+            <div id="personalityTitle"></div>
+            <div id="personalityDescription"></div>
+            <div id="statsDisplay"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        class FarmRushGame {
+            constructor() {
+                this.canvas = document.getElementById('gameCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.state = 'instructions';
+                this.score = 0;
+                this.timeLeft = 30;
+                this.crops = [];
+                this.particles = [];
+                this.gameStartTime = 0;
+                
+                // Behavioral tracking
+                this.behaviorData = {
+                    clicks: 0,
+                    totalReactionTime: 0,
+                    reactionTimes: [],
+                    leftClicks: 0,
+                    rightClicks: 0,
+                    centerClicks: 0,
+                    startTime: Date.now(),
+                    missedCrops: 0,
+                    perfectHits: 0
+                };
+                
+                this.setupCanvas();
+                this.setupEventListeners();
+                this.setupResizeObserver();
+                this.gameLoop();
+            }
+            
+            setupCanvas() {
+                this.resizeCanvas();
+            }
+            
+            resizeCanvas() {
+                const container = document.getElementById('gameContainer');
+                const rect = container.getBoundingClientRect();
+                
+                this.canvas.width = rect.width;
+                this.canvas.height = rect.height;
+                
+                this.width = this.canvas.width;
+                this.height = this.canvas.height;
+            }
+            
+            setupResizeObserver() {
+                const resizeObserver = new ResizeObserver(() => {
+                    this.resizeCanvas();
+                });
+                resizeObserver.observe(document.getElementById('gameContainer'));
+            }
+            
+            setupEventListeners() {
+                // Touch events
+                this.canvas.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    const touch = e.touches[0];
+                    const rect = this.canvas.getBoundingClientRect();
+                    const x = touch.clientX - rect.left;
+                    const y = touch.clientY - rect.top;
+                    this.handleInput(x, y);
+                });
+                
+                // Mouse events
+                this.canvas.addEventListener('click', (e) => {
+                    const rect = this.canvas.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    this.handleInput(x, y);
+                });
+                
+                // Keyboard fallback
+                document.addEventListener('keydown', (e) => {
+                    if (e.code === 'Space' || e.code === 'Enter') {
+                        e.preventDefault();
+                        this.handleInput(this.width / 2, this.height / 2);
+                    }
+                });
+                
+                // Instruction panel click
+                document.getElementById('instructionPanel').addEventListener('click', () => {
+                    this.startGame();
+                });
+            }
+            
+            handleInput(x, y) {
+                if (this.state === 'instructions') {
+                    this.startGame();
+                    return;
+                }
+                
+                if (this.state !== 'playing') return;
+                
+                this.behaviorData.clicks++;
+                
+                // Track hand preference
+                const centerThreshold = this.width * 0.2;
+                if (x < this.width / 2 - centerThreshold) {
+                    this.behaviorData.leftClicks++;
+                } else if (x > this.width / 2 + centerThreshold) {
+                    this.behaviorData.rightClicks++;
+                } else {
+                    this.behaviorData.centerClicks++;
+                }
+                
+                // Check crop hits
+                let hit = false;
+                for (let i = this.crops.length - 1; i >= 0; i--) {
+                    const crop = this.crops[i];
+                    const dx = x - crop.x;
+                    const dy = y - crop.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < crop.radius + 10) {
+                        hit = true;
+                        const reactionTime = Date.now() - crop.spawnTime;
+                        this.behaviorData.reactionTimes.push(reactionTime);
+                        this.behaviorData.totalReactionTime += reactionTime;
+                        
+                        if (reactionTime < 500) {
+                            this.behaviorData.perfectHits++;
+                        }
+                        
+                        this.score += Math.max(1, Math.floor(1000 / reactionTime));
+                        this.crops.splice(i, 1);
+                        this.createHitParticles(crop.x, crop.y);
+                        break;
+                    }
+                }
+                
+                if (!hit) {
+                    this.createMissParticles(x, y);
+                }
+            }
+            
+            startGame() {
+                this.state = 'playing';
+                this.gameStartTime = Date.now();
+                this.behaviorData.startTime = Date.now();
+                
+                // Hide instruction panel
+                gsap.to('#instructionPanel', {
+                    opacity: 0,
+                    duration: 0.5,
+                    onComplete: () => {
+                        document.getElementById('instructionPanel').style.display = 'none';
+                    }
+                });
+                
+                // Start timer
+                this.startTimer();
+                
+                // Start spawning crops
+                this.spawnCrops();
+            }
+            
+            startTimer() {
+                const timer = setInterval(() => {
+                    this.timeLeft--;
+                    document.getElementById('timer').textContent = `${this.timeLeft}s`;
+                    
+                    if (this.timeLeft <= 0) {
+                        clearInterval(timer);
+                        this.endGame();
+                    }
+                }, 1000);
+            }
+            
+            spawnCrops() {
+                if (this.state !== 'playing') return;
+                
+                const crop = {
+                    x: Math.random() * (this.width - 100) + 50,
+                    y: Math.random() * (this.height - 200) + 100,
+                    radius: 20 + Math.random() * 10,
+                    color: this.getCropColor(),
+                    spawnTime: Date.now(),
+                    life: 3000 - (30 - this.timeLeft) * 50 // Crops disappear faster as time goes on
+                };
+                
+                this.crops.push(crop);
+                
+                // Schedule next crop
+                const spawnRate = Math.max(200, 800 - (30 - this.timeLeft) * 20);
+                setTimeout(() => this.spawnCrops(), spawnRate);
+            }
+            
+            getCropColor() {
+                const colors = ['#FF6347', '#FFD700', '#32CD32', '#FF4500', '#9370DB'];
+                return colors[Math.floor(Math.random() * colors.length)];
+            }
+            
+            createHitParticles(x, y) {
+                for (let i = 0; i < 8; i++) {
+                    this.particles.push({
+                        x: x,
+                        y: y,
+                        vx: (Math.random() - 0.5) * 10,
+                        vy: (Math.random() - 0.5) * 10,
+                        life: 30,
+                        maxLife: 30,
+                        color: '#FFD700',
+                        size: Math.random() * 4 + 2
+                    });
+                }
+            }
+            
+            createMissParticles(x, y) {
+                for (let i = 0; i < 4; i++) {
+                    this.particles.push({
+                        x: x,
+                        y: y,
+                        vx: (Math.random() - 0.5) * 6,
+                        vy: (Math.random() - 0.5) * 6,
+                        life: 20,
+                        maxLife: 20,
+                        color: '#FF6B6B',
+                        size: Math.random() * 3 + 1
+                    });
+                }
+            }
+            
+            update() {
+                if (this.state !== 'playing') return;
+                
+                // Update crops
+                for (let i = this.crops.length - 1; i >= 0; i--) {
+                    const crop = this.crops[i];
+                    crop.life -= 16; // Assuming 60fps
+                    
+                    if (crop.life <= 0) {
+                        this.crops.splice(i, 1);
+                        this.behaviorData.missedCrops++;
+                    }
+                }
+                
+                // Update particles
+                for (let i = this.particles.length - 1; i >= 0; i--) {
+                    const particle = this.particles[i];
+                    particle.x += particle.vx;
+                    particle.y += particle.vy;
+                    particle.life--;
+                    
+                    if (particle.life <= 0) {
+                        this.particles.splice(i, 1);
+                    }
+                }
+                
+                // Update score display
+                document.getElementById('score').textContent = `Score: ${this.score}`;
+            }
+            
+            render() {
+                // Clear canvas
+                this.ctx.clearRect(0, 0, this.width, this.height);
+                
+                // Draw background
+                const gradient = this.ctx.createLinearGradient(0, 0, 0, this.height);
+                gradient.addColorStop(0, '#87CEEB');
+                gradient.addColorStop(1, '#98FB98');
+                this.ctx.fillStyle = gradient;
+                this.ctx.fillRect(0, 0, this.width, this.height);
+                
+                // Draw ground
+                this.ctx.fillStyle = '#8B4513';
+                this.ctx.fillRect(0, this.height * 0.8, this.width, this.height * 0.2);
+                
+                if (this.state === 'playing') {
+                    // Draw crops
+                    this.crops.forEach(crop => {
+                        const alpha = Math.min(1, crop.life / 1000);
+                        this.ctx.globalAlpha = alpha;
+                        
+                        // Crop shadow
+                        this.ctx.fillStyle = 'rgba(0,0,0,0.2)';
+                        this.ctx.beginPath();
+                        this.ctx.arc(crop.x + 2, crop.y + 2, crop.radius, 0, Math.PI * 2);
+                        this.ctx.fill();
+                        
+                        // Crop
+                        this.ctx.fillStyle = crop.color;
+                        this.ctx.beginPath();
+                        this.ctx.arc(crop.x, crop.y, crop.radius, 0, Math.PI * 2);
+                        this.ctx.fill();
+                        
+                        // Crop highlight
+                        this.ctx.fillStyle = 'rgba(255,255,255,0.3)';
+                        this.ctx.beginPath();
+                        this.ctx.arc(crop.x - crop.radius * 0.3, crop.y - crop.radius * 0.3, crop.radius * 0.4, 0, Math.PI * 2);
+                        this.ctx.fill();
+                        
+                        this.ctx.globalAlpha = 1;
+                    });
+                    
+                    // Draw particles
+                    this.particles.forEach(particle => {
+                        const alpha = particle.life / particle.maxLife;
+                        this.ctx.globalAlpha = alpha;
+                        this.ctx.fillStyle = particle.color;
+                        this.ctx.beginPath();
+                        this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                        this.ctx.fill();
+                        this.ctx.globalAlpha = 1;
+                    });
+                }
+            }
+            
+            endGame() {
+                this.state = 'gameOver';
+                this.analyzePersonality();
+                this.showResults();
+            }
+            
+            analyzePersonality() {
+                const data = this.behaviorData;
+                const totalClicks = data.leftClicks + data.rightClicks + data.centerClicks;
+                const avgReactionTime = data.totalReactionTime / Math.max(1, data.reactionTimes.length);
+                const accuracy = data.clicks > 0 ? (data.clicks - data.missedCrops) / data.clicks : 0;
+                const clicksPerSecond = data.clicks / 30;
+                
+                // Determine hand preference
+                let handPreference = 'Ambidextrous';
+                if (totalClicks > 5) {
+                    const leftRatio = data.leftClicks / totalClicks;
+                    const rightRatio = data.rightClicks / totalClicks;
+                    
+                    if (leftRatio > 0.6) handPreference = 'Left-handed';
+                    else if (rightRatio > 0.6) handPreference = 'Right-handed';
+                }
+                
+                // Determine personality
+                let personality = {
+                    title: '',
+                    description: '',
+                    handPreference: handPreference
+                };
+                
+                if (avgReactionTime < 400 && accuracy > 0.8) {
+                    personality.title = 'Lightning Farmer';
+                    personality.description = 'You have incredible reflexes and precision! Your quick thinking and accurate harvesting make you a natural farm champion.';
+                } else if (clicksPerSecond > 2) {
+                    personality.title = 'Energetic Harvester';
+                    personality.description = 'Your enthusiasm is contagious! You approach farming with high energy and determination, never backing down from a challenge.';
+                } else if (accuracy > 0.7) {
+                    personality.title = 'Methodical Cultivator';
+                    personality.description = 'Quality over quantity is your motto. You take your time to ensure every harvest is perfect, showing patience and precision.';
+                } else if (data.clicks > 50) {
+                    personality.title = 'Persistent Planter';
+                    personality.description = 'Your determination knows no bounds! Even when things get tough, you keep pushing forward with unwavering persistence.';
+                } else {
+                    personality.title = 'Thoughtful Gardener';
+                    personality.description = 'You approach farming with careful consideration. Your thoughtful nature means you make every action count.';
+                }
+                
+                this.personality = personality;
+            }
+            
+            showResults() {
+                const panel = document.getElementById('resultsPanel');
+                const title = document.getElementById('personalityTitle');
+                const description = document.getElementById('personalityDescription');
+                const stats = document.getElementById('statsDisplay');
+                
+                title.textContent = this.personality.title;
+                description.textContent = this.personality.description;
+                
+                const avgReaction = this.behaviorData.totalReactionTime / Math.max(1, this.behaviorData.reactionTimes.length);
+                stats.innerHTML = `
+                    <div>Final Score: ${this.score}</div>
+                    <div>Hand Preference: ${this.personality.handPreference}</div>
+                    <div>Average Reaction: ${Math.round(avgReaction)}ms</div>
+                    <div>Total Clicks: ${this.behaviorData.clicks}</div>
+                `;
+                
+                panel.style.display = 'flex';
+                gsap.fromTo(panel, 
+                    { opacity: 0, scale: 0.8 }, 
+                    { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" }
+                );
+            }
+            
+            gameLoop() {
+                this.update();
+                this.render();
+                requestAnimationFrame(() => this.gameLoop());
+            }
+        }
+        
+        // Initialize game when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new FarmRushGame();
+            
+            // Add breathing animation to UI elements
+            document.getElementById('score').classList.add('breathing');
+            document.getElementById('timer').classList.add('breathing');
+        });
+    </script>
+</body>
+</html>
+    </div>
+    <div class="watermark">GameCraft AI</div>
+    
+    <script>
+        // Prevent zooming on mobile
+        document.addEventListener('gesturestart', function (e) {
+            e.preventDefault();
+        });
+        
+        document.addEventListener('gesturechange', function (e) {
+            e.preventDefault();
+        });
+        
+        document.addEventListener('gestureend', function (e) {
+            e.preventDefault();
+        });
+        
+        // Game analytics (optional)
+        console.log('Game ID: game_1753781263826_u991dcnhpvc');
+        console.log('Theme: Farm Rush Teaser');
+        console.log('Generated at: 2025-07-29T09:27:43.826Z');
+    </script>
+</body>
+</html>
