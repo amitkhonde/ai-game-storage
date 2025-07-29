@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Create a tetris game - AI Generated Game</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #000;
+            font-family: 'Outfit', system-ui, sans-serif;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        .game-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: manipulation;
+            -webkit-overflow-scrolling: touch;
+        }
+        .watermark {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            color: rgba(255,255,255,0.3);
+            font-size: 10px;
+            z-index: 1000;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Tetris Teaser</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            background: linear-gradient(45deg, #1a1a2e, #16213e, #0f3460);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease-in-out infinite;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        #gameContainer {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        #gameCanvas {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+            animation: canvasBreathe 3s ease-in-out infinite;
+        }
+        
+        @keyframes canvasBreathe {
+            0%, 100% { box-shadow: 0 0 30px rgba(0, 255, 255, 0.3); }
+            50% { box-shadow: 0 0 50px rgba(0, 255, 255, 0.6); }
+        }
+        
+        #instructionPanel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: all 0.5s ease-out;
+        }
+        
+        #instructionPanel.hidden {
+            opacity: 0;
+            transform: scale(0.8);
+            pointer-events: none;
+        }
+        
+        #instructionSVG {
+            width: 100%;
+            height: 100%;
+            max-width: 600px;
+            max-height: 400px;
+        }
+        
+        #hud {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            font-size: 18px;
+            z-index: 100;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+        
+        #timer {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: #ff6b6b;
+            font-size: 24px;
+            font-weight: bold;
+            z-index: 100;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+        
+        #personalityPanel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(30, 30, 60, 0.95));
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.8s ease-out;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        #personalityPanel.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        #personalityTitle {
+            color: #00ffff;
+            font-size: clamp(24px, 5vw, 48px);
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+            animation: titleGlow 2s ease-in-out infinite;
+        }
+        
+        @keyframes titleGlow {
+            0%, 100% { text-shadow: 0 0 20px rgba(0, 255, 255, 0.8); }
+            50% { text-shadow: 0 0 40px rgba(0, 255, 255, 1); }
+        }
+        
+        #personalityDescription {
+            color: white;
+            font-size: clamp(14px, 3vw, 20px);
+            line-height: 1.6;
+            max-width: 80%;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #00ffff;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 50;
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <canvas id="gameCanvas"></canvas>
+        
+        <div id="instructionPanel">
+            <svg id="instructionSVG" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid meet">
+                <defs>
+                    <linearGradient id="titleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" style="stop-color:#00ffff;stop-opacity:1">
+                            <animate attributeName="stop-color" values="#00ffff;#ff00ff;#00ffff" dur="3s" repeatCount="indefinite"/>
+                        </stop>
+                        <stop offset="100%" style="stop-color:#ff00ff;stop-opacity:1">
+                            <animate attributeName="stop-color" values="#ff00ff;#00ffff;#ff00ff" dur="3s" repeatCount="indefinite"/>
+                        </stop>
+                    </linearGradient>
+                </defs>
+                
+                <text x="300" y="100" text-anchor="middle" fill="url(#titleGrad)" font-size="36" font-weight="bold">
+                    TETRIS RUSH
+                    <animateTransform attributeName="transform" type="scale" values="1;1.1;1" dur="2s" repeatCount="indefinite"/>
+                </text>
+                
+                <g transform="translate(200, 150)">
+                    <rect x="0" y="0" width="30" height="30" fill="#ff6b6b" opacity="0.8">
+                        <animateTransform attributeName="transform" type="rotate" values="0;360" dur="4s" repeatCount="indefinite"/>
+                    </rect>
+                    <rect x="30" y="0" width="30" height="30" fill="#4ecdc4" opacity="0.8">
+                        <animateTransform attributeName="transform" type="rotate" values="0;-360" dur="3s" repeatCount="indefinite"/>
+                    </rect>
+                    <rect x="60" y="0" width="30" height="30" fill="#45b7d1" opacity="0.8">
+                        <animateTransform attributeName="transform" type="rotate" values="0;360" dur="5s" repeatCount="indefinite"/>
+                    </rect>
+                    <rect x="90" y="0" width="30" height="30" fill="#f9ca24" opacity="0.8">
+                        <animateTransform attributeName="transform" type="rotate" values="0;-360" dur="2.5s" repeatCount="indefinite"/>
+                    </rect>
+                    <rect x="120" y="0" width="30" height="30" fill="#6c5ce7" opacity="0.8">
+                        <animateTransform attributeName="transform" type="rotate" values="0;360" dur="3.5s" repeatCount="indefinite"/>
+                    </rect>
+                    <rect x="150" y="0" width="30" height="30" fill="#a29bfe" opacity="0.8">
+                        <animateTransform attributeName="transform" type="rotate" values="0;-360" dur="4.5s" repeatCount="indefinite"/>
+                    </rect>
+                    <rect x="180" y="0" width="30" height="30" fill="#fd79a8" opacity="0.8">
+                        <animateTransform attributeName="transform" type="rotate" values="0;360" dur="2s" repeatCount="indefinite"/>
+                    </rect>
+                </g>
+                
+                <text x="300" y="250" text-anchor="middle" fill="white" font-size="18">
+                    Tap to rotate blocks
+                </text>
+                <text x="300" y="280" text-anchor="middle" fill="white" font-size="18">
+                    Clear lines to score
+                </text>
+                <text x="300" y="320" text-anchor="middle" fill="#00ffff" font-size="20" font-weight="bold">
+                    TAP ANYWHERE TO START
+                    <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
+                </text>
+            </svg>
+        </div>
+        
+        <div id="hud">
+            <div>Score: <span id="score">0</span></div>
+            <div>Lines: <span id="lines">0</span></div>
+        </div>
+        
+        <div id="timer">30</div>
+        
+        <div id="personalityPanel">
+            <div id="personalityTitle"></div>
+            <div id="personalityDescription"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        class TetrisTeaser {
+            constructor() {
+                this.canvas = document.getElementById('gameCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.state = 'instructions';
+                this.score = 0;
+                this.lines = 0;
+                this.gameTime = 30;
+                this.startTime = 0;
+                
+                // Game grid
+                this.gridWidth = 10;
+                this.gridHeight = 20;
+                this.blockSize = 0;
+                this.grid = [];
+                
+                // Current piece
+                this.currentPiece = null;
+                this.nextPiece = null;
+                
+                // Behavioral tracking
+                this.behaviorData = {
+                    clicks: 0,
+                    totalReactionTime: 0,
+                    reactionCount: 0,
+                    leftSideClicks: 0,
+                    rightSideClicks: 0,
+                    centerClicks: 0,
+                    aggressiveClicks: 0,
+                    lastClickTime: 0,
+                    persistence: 0,
+                    linesCleared: 0
+                };
+                
+                // Tetris pieces
+                this.pieces = [
+                    { shape: [[1,1,1,1]], color: '#00ffff' }, // I
+                    { shape: [[1,1],[1,1]], color: '#ffff00' }, // O
+                    { shape: [[0,1,0],[1,1,1]], color: '#800080' }, // T
+                    { shape: [[0,1,1],[1,1,0]], color: '#00ff00' }, // S
+                    { shape: [[1,1,0],[0,1,1]], color: '#ff0000' }, // Z
+                    { shape: [[1,0,0],[1,1,1]], color: '#0000ff' }, // J
+                    { shape: [[0,0,1],[1,1,1]], color: '#ffa500' }  // L
+                ];
+                
+                this.particles = [];
+                this.init();
+            }
+            
+            init() {
+                this.setupCanvas();
+                this.setupEventListeners();
+                this.initGrid();
+                this.spawnParticles();
+                this.gameLoop();
+            }
+            
+            setupCanvas() {
+                const container = document.getElementById('gameContainer');
+                const containerWidth = container.offsetWidth;
+                const containerHeight = container.offsetHeight;
+                
+                // Calculate optimal canvas size maintaining aspect ratio
+                const aspectRatio = 0.5; // width/height
+                let canvasWidth = Math.min(containerWidth * 0.8, containerHeight * aspectRatio * 0.8);
+                let canvasHeight = canvasWidth / aspectRatio;
+                
+                if (canvasHeight > containerHeight * 0.8) {
+                    canvasHeight = containerHeight * 0.8;
+                    canvasWidth = canvasHeight * aspectRatio;
+                }
+                
+                this.canvas.width = canvasWidth;
+                this.canvas.height = canvasHeight;
+                this.canvas.style.width = canvasWidth + 'px';
+                this.canvas.style.height = canvasHeight + 'px';
+                
+                this.blockSize = Math.floor(canvasWidth / this.gridWidth);
+            }
+            
+            setupEventListeners() {
+                // Instruction panel click
+                document.getElementById('instructionPanel').addEventListener('click', () => {
+                    if (this.state === 'instructions') {
+                        this.startGame();
+                    }
+                });
+                
+                // Game controls
+                this.canvas.addEventListener('click', (e) => this.handleInput(e));
+                this.canvas.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    this.handleInput(e.touches[0]);
+                });
+                
+                // Keyboard controls
+                document.addEventListener('keydown', (e) => {
+                    if (this.state === 'playing') {
+                        if (e.code === 'Space' || e.code === 'ArrowUp') {
+                            this.rotatePiece();
+                        }
+                    }
+                });
+                
+                // Resize handling
+                window.addEventListener('resize', () => this.setupCanvas());
+                
+                // ResizeObserver for container changes
+                if (window.ResizeObserver) {
+                    const resizeObserver = new ResizeObserver(() => this.setupCanvas());
+                    resizeObserver.observe(document.getElementById('gameContainer'));
+                }
+            }
+            
+            handleInput(e) {
+                if (this.state !== 'playing') return;
+                
+                const rect = this.canvas.getBoundingClientRect();
+                const x = (e.clientX || e.pageX) - rect.left;
+                const canvasWidth = rect.width;
+                
+                // Track behavioral data
+                this.behaviorData.clicks++;
+                const now = Date.now();
+                
+                if (this.behaviorData.lastClickTime > 0) {
+                    const timeDiff = now - this.behaviorData.lastClickTime;
+                    if (timeDiff < 200) {
+                        this.behaviorData.aggressiveClicks++;
+                    }
+                    this.behaviorData.totalReactionTime += timeDiff;
+                    this.behaviorData.reactionCount++;
+                }
+                
+                // Track hand preference
+                if (x < canvasWidth * 0.33) {
+                    this.behaviorData.leftSideClicks++;
+                } else if (x > canvasWidth * 0.66) {
+                    this.behaviorData.rightSideClicks++;
+                } else {
+                    this.behaviorData.centerClicks++;
+                }
+                
+                this.behaviorData.lastClickTime = now;
+                
+                this.rotatePiece();
+                this.createClickParticles(x, rect.height / 2);
+            }
+            
+            initGrid() {
+                this.grid = [];
+                for (let y = 0; y < this.gridHeight; y++) {
+                    this.grid[y] = [];
+                    for (let x = 0; x < this.gridWidth; x++) {
+                        this.grid[y][x] = null;
+                    }
+                }
+            }
+            
+            startGame() {
+                this.state = 'playing';
+                this.startTime = Date.now();
+                document.getElementById('instructionPanel').classList.add('hidden');
+                this.spawnPiece();
+                this.startTimer();
+            }
+            
+            startTimer() {
+                const timerElement = document.getElementById('timer');
+                const updateTimer = () => {
+                    if (this.state !== 'playing') return;
+                    
+                    const elapsed = Math.floor((Date.now() - this.startTime) / 1000);
+                    const remaining = Math.max(0, this.gameTime - elapsed);
+                    timerElement.textContent = remaining;
+                    
+                    if (remaining <= 0) {
+                        this.endGame();
+                        return;
+                    }
+                    
+                    setTimeout(updateTimer, 100);
+                };
+                updateTimer();
+            }
+            
+            spawnPiece() {
+                if (!this.nextPiece) {
+                    this.nextPiece = this.pieces[Math.floor(Math.random() * this.pieces.length)];
+                }
+                
+                this.currentPiece = {
+                    ...this.nextPiece,
+                    x: Math.floor(this.gridWidth / 2) - 1,
+                    y: 0,
+                    shape: JSON.parse(JSON.stringify(this.nextPiece.shape))
+                };
+                
+                this.nextPiece = this.pieces[Math.floor(Math.random() * this.pieces.length)];
+                
+                // Check game over
+                if (this.checkCollision(this.currentPiece, 0, 0)) {
+                    this.endGame();
+                }
+            }
+            
+            rotatePiece() {
+                if (!this.currentPiece) return;
+                
+                const rotated = this.rotateMatrix(this.currentPiece.shape);
+                const originalShape = this.currentPiece.shape;
+                this.currentPiece.shape = rotated;
+                
+                if (this.checkCollision(this.currentPiece, 0, 0)) {
+                    this.currentPiece.shape = originalShape;
+                } else {
+                    // Successful rotation - create particles
+                    this.createRotationParticles();
+                }
+            }
+            
+            rotateMatrix(matrix) {
+                const rows = matrix.length;
+                const cols = matrix[0].length;
+                const rotated = [];
+                
+                for (let i = 0; i < cols; i++) {
+                    rotated[i] = [];
+                    for (let j = 0; j < rows; j++) {
+                        rotated[i][j] = matrix[rows - 1 - j][i];
+                    }
+                }
+                
+                return rotated;
+            }
+            
+            checkCollision(piece, deltaX, deltaY) {
+                for (let y = 0; y < piece.shape.length; y++) {
+                    for (let x = 0; x < piece.shape[y].length; x++) {
+                        if (piece.shape[y][x]) {
+                            const newX = piece.x + x + deltaX;
+                            const newY = piece.y + y + deltaY;
+                            
+                            if (newX < 0 || newX >= this.gridWidth || 
+                                newY >= this.gridHeight || 
+                                (newY >= 0 && this.grid[newY][newX])) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+                return false;
+            }
+            
+            placePiece() {
+                for (let y = 0; y < this.currentPiece.shape.length; y++) {
+                    for (let x = 0; x < this.currentPiece.shape[y].length; x++) {
+                        if (this.currentPiece.shape[y][x]) {
+                            const gridY = this.currentPiece.y + y;
+                            const gridX = this.currentPiece.x + x;
+                            if (gridY >= 0) {
+                                this.grid[gridY][gridX] = this.currentPiece.color;
+                            }
+                        }
+                    }
+                }
+                
+                this.clearLines();
+                this.spawnPiece();
+            }
+            
+            clearLines() {
+                let linesCleared = 0;
+                
+                for (let y = this.gridHeight - 1; y >= 0; y--) {
+                    if (this.grid[y].every(cell => cell !== null)) {
+                        // Create line clear particles
+                        this.createLineClearParticles(y);
+                        
+                        this.grid.splice(y, 1);
+                        this.grid.unshift(new Array(this.gridWidth).fill(null));
+                        linesCleared++;
+                        y++; // Check the same line again
+                    }
+                }
+                
+                if (linesCleared > 0) {
+                    this.lines += linesCleared;
+                    this.score += linesCleared * 100 * (linesCleared > 1 ? 2 : 1);
+                    this.behaviorData.linesCleared += linesCleared;
+                    this.updateHUD();
+                }
+            }
+            
+            updateHUD() {
+                document.getElementById('score').textContent = this.score;
+                document.getElementById('lines').textContent = this.lines;
+            }
+            
+            spawnParticles() {
+                // Background ambient particles
+                setInterval(() => {
+                    if (this.particles.length < 50) {
+                        this.particles.push({
+                            x: Math.random() * this.canvas.width,
+                            y: this.canvas.height + 10,
+                            vx: (Math.random() - 0.5) * 2,
+                            vy: -Math.random() * 3 - 1,
+                            life: 1,
+                            decay: 0.01,
+                            size: Math.random() * 3 + 1,
+                            color: `hsl(${Math.random() * 60 + 180}, 70%, 60%)`
+                        });
+                    }
+                }, 200);
+            }
+            
+            createClickParticles(x, y) {
+                for (let i = 0; i < 8; i++) {
+                    this.particles.push({
+                        x: x,
+                        y: y,
+                        vx: (Math.random() - 0.5) * 8,
+                        vy: (Math.random() - 0.5) * 8,
+                        life: 1,
+                        decay: 0.05,
+                        size: Math.random() * 4 + 2,
+                        color: '#00ffff'
+                    });
+                }
+            }
+            
+            createRotationParticles() {
+                if (!this.currentPiece) return;
+                
+                const centerX = (this.currentPiece.x + this.currentPiece.shape[0].length / 2) * this.blockSize;
+                const centerY = (this.currentPiece.y + this.currentPiece.shape.length / 2) * this.blockSize;
+                
+                for (let i = 0; i < 12; i++) {
+                    const angle = (i / 12) * Math.PI * 2;
+                    this.particles.push({
+                        x: centerX,
+                        y: centerY,
+                        vx: Math.cos(angle) * 5,
+                        vy: Math.sin(angle) * 5,
+                        life: 1,
+                        decay: 0.03,
+                        size: 3,
+                        color: this.currentPiece.color
+                    });
+                }
+            }
+            
+            createLineClearParticles(lineY) {
+                for (let x = 0; x < this.gridWidth; x++) {
+                    for (let i = 0; i < 3; i++) {
+                        this.particles.push({
+                            x: x * this.blockSize + this.blockSize / 2,
+                            y: lineY * this.blockSize + this.blockSize / 2,
+                            vx: (Math.random() - 0.5) * 10,
+                            vy: (Math.random() - 0.5) * 10,
+                            life: 1,
+                            decay: 0.02,
+                            size: Math.random() * 5 + 3,
+                            color: '#ffff00'
+                        });
+                    }
+                }
+            }
+            
+            updateParticles() {
+                this.particles = this.particles.filter(particle => {
+                    particle.x += particle.vx;
+                    particle.y += particle.vy;
+                    particle.life -= particle.decay;
+                    particle.vy += 0.1; // gravity
+                    
+                    return particle.life > 0;
+                });
+            }
+            
+            update() {
+                if (this.state !== 'playing') return;
+                
+                this.updateParticles();
+                
+                // Move piece down automatically
+                if (this.currentPiece && Date.now() % 500 < 16) {
+                    if (!this.checkCollision(this.currentPiece, 0, 1)) {
+                        this.currentPiece.y++;
+                    } else {
+                        this.placePiece();
+                    }
+                }
+                
+                // Track persistence
+                this.behaviorData.persistence = Date.now() - this.startTime;
+            }
+            
+            render() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                // Draw grid background
+                this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+                this.ctx.lineWidth = 1;
+                for (let x = 0; x <= this.gridWidth; x++) {
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(x * this.blockSize, 0);
+                    this.ctx.lineTo(x * this.blockSize, this.gridHeight * this.blockSize);
+                    this.ctx.stroke();
+                }
+                for (let y = 0; y <= this.gridHeight; y++) {
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(0, y * this.blockSize);
+                    this.ctx.lineTo(this.gridWidth * this.blockSize, y * this.blockSize);
+                    this.ctx.stroke();
+                }
+                
+                // Draw placed blocks
+                for (let y = 0; y < this.gridHeight; y++) {
+                    for (let x = 0; x < this.gridWidth; x++) {
+                        if (this.grid[y][x]) {
+                            this.drawBlock(x * this.blockSize, y * this.blockSize, this.grid[y][x]);
+                        }
+                    }
+                }
+                
+                // Draw current piece
+                if (this.currentPiece) {
+                    for (let y = 0; y < this.currentPiece.shape.length; y++) {
+                        for (let x = 0; x < this.currentPiece.shape[y].length; x++) {
+                            if (this.currentPiece.shape[y][x]) {
+                                const drawX = (this.currentPiece.x + x) * this.blockSize;
+                                const drawY = (this.currentPiece.y + y) * this.blockSize;
+                                this.drawBlock(drawX, drawY, this.currentPiece.color);
+                            }
+                        }
+                    }
+                }
+                
+                // Draw particles
+                this.particles.forEach(particle => {
+                    this.ctx.save();
+                    this.ctx.globalAlpha = particle.life;
+                    this.ctx.fillStyle = particle.color;
+                    this.ctx.beginPath();
+                    this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                    this.ctx.fill();
+                    this.ctx.restore();
+                });
+            }
+            
+            drawBlock(x, y, color) {
+                this.ctx.fillStyle = color;
+                this.ctx.fillRect(x + 1, y + 1, this.blockSize - 2, this.blockSize - 2);
+                
+                // Add highlight
+                this.ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+                this.ctx.fillRect(x + 1, y + 1, this.blockSize - 2, 3);
+                this.ctx.fillRect(x + 1, y + 1, 3, this.blockSize - 2);
+            }
+            
+            endGame() {
+                this.state = 'gameOver';
+                this.showPersonalityReveal();
+            }
+            
+            showPersonalityReveal() {
+                const personality = this.analyzePersonality();
+                
+                document.getElementById('personalityTitle').textContent = personality.type;
+                document.getElementById('personalityDescription').innerHTML = personality.description;
+                
+                const panel = document.getElementById('personalityPanel');
+                panel.classList.add('show');
+                
+                // Animate the reveal
+                gsap.from('#personalityTitle', {
+                    duration: 1,
+                    y: -50,
+                    opacity: 0,
+                    ease: "back.out(1.7)",
+                    delay: 0.5
+                });
+                
+                gsap.from('#personalityDescription', {
+                    duration: 1,
+                    y: 50,
+                    opacity: 0,
+                    ease: "power2.out",
+                    delay: 0.8
+                });
+            }
+            
+            analyzePersonality() {
+                const data = this.behaviorData;
+                const avgReactionTime = data.reactionCount > 0 ? data.totalReactionTime / data.reactionCount : 1000;
+                const clicksPerSecond = data.clicks / (data.persistence / 1000);
+                const aggressiveRatio = data.aggressiveClicks / Math.max(data.clicks, 1);
+                
+                // Determine hand preference
+                let handPreference = 'Ambidextrous';
+                const totalSideClicks = data.leftSideClicks + data.rightSideClicks + data.centerClicks;
+                if (totalSideClicks > 5) {
+                    if (data.leftSideClicks > data.rightSideClicks * 1.5) {
+                        handPreference = 'Left-handed';
+                    } else if (data.rightSideClicks > data.leftSideClicks * 1.5) {
+                        handPreference = 'Right-handed';
+                    }
+                }
+                
+                // Determine personality type
+                let type, description;
+                
+                if (avgReactionTime < 300 && aggressiveRatio > 0.3) {
+                    type = "Lightning Striker";
+                    description = `You're a fast-acting, decisive player who thinks quickly under pressure. Your rapid-fire approach shows confidence and determination.<br><br><strong>Hand Preference:</strong> ${handPreference}<br><strong>Score:</strong> ${this.score} points`;
+    </div>
+    <div class="watermark">GameCraft AI</div>
+    
+    <script>
+        // Prevent zooming on mobile
+        document.addEventListener('gesturestart', function (e) {
+            e.preventDefault();
+        });
+        
+        document.addEventListener('gesturechange', function (e) {
+            e.preventDefault();
+        });
+        
+        document.addEventListener('gestureend', function (e) {
+            e.preventDefault();
+        });
+        
+        // Game analytics (optional)
+        console.log('Game ID: game_1753784350830_amtx4nf1756');
+        console.log('Theme: Create a tetris game');
+        console.log('Generated at: 2025-07-29T10:19:10.830Z');
+    </script>
+</body>
+</html>
