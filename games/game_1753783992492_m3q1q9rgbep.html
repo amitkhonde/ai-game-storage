@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Cookie Clicker Teaser - AI Generated Game</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #000;
+            font-family: 'Outfit', system-ui, sans-serif;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+        .game-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: manipulation;
+            -webkit-overflow-scrolling: touch;
+        }
+        .watermark {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            color: rgba(255,255,255,0.3);
+            font-size: 10px;
+            z-index: 1000;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Cookie Clicker Teaser</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+            background-size: 400% 400%;
+            animation: gradientShift 8s ease infinite;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        #gameContainer {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #instructionPanel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.5s ease;
+        }
+        
+        #gameCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            cursor: pointer;
+            touch-action: none;
+        }
+        
+        #ui {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            z-index: 100;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        #cookieCount {
+            font-size: clamp(24px, 5vw, 48px);
+            font-weight: bold;
+            text-align: center;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        #upgradesPanel {
+            position: absolute;
+            right: 20px;
+            top: 80px;
+            width: clamp(200px, 25vw, 300px);
+            max-height: 60vh;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            padding: 10px;
+        }
+        
+        .upgrade {
+            background: rgba(255, 255, 255, 0.1);
+            margin: 5px 0;
+            padding: 8px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: clamp(10px, 2vw, 14px);
+        }
+        
+        .upgrade:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.02);
+        }
+        
+        .upgrade.affordable {
+            background: rgba(76, 175, 80, 0.3);
+        }
+        
+        .upgrade.unaffordable {
+            background: rgba(244, 67, 54, 0.3);
+            opacity: 0.6;
+        }
+        
+        #personalityPanel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            color: white;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        #personalityTitle {
+            font-size: clamp(28px, 6vw, 56px);
+            font-weight: bold;
+            margin-bottom: 20px;
+            animation: fadeInScale 1s ease;
+        }
+        
+        #personalityDescription {
+            font-size: clamp(16px, 3vw, 24px);
+            max-width: 80%;
+            line-height: 1.6;
+            animation: fadeInScale 1s ease 0.5s both;
+        }
+        
+        @keyframes fadeInScale {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        #timer {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: clamp(18px, 4vw, 32px);
+            font-weight: bold;
+            color: #ff6b6b;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <div id="instructionPanel">
+            <svg width="100%" height="100%" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet">
+                <defs>
+                    <radialGradient id="cookieGrad" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%" style="stop-color:#D2691E;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#8B4513;stop-opacity:1" />
+                    </radialGradient>
+                </defs>
+                
+                <circle cx="400" cy="200" r="80" fill="url(#cookieGrad)" stroke="#654321" stroke-width="4">
+                    <animateTransform attributeName="transform" type="rotate" values="0 400 200;360 400 200" dur="4s" repeatCount="indefinite"/>
+                </circle>
+                
+                <circle cx="370" cy="180" r="8" fill="#654321">
+                    <animate attributeName="opacity" values="0.5;1;0.5" dur="2s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="430" cy="190" r="6" fill="#654321">
+                    <animate attributeName="opacity" values="1;0.5;1" dur="2s" repeatCount="indefinite"/>
+                </circle>
+                <circle cx="390" cy="220" r="7" fill="#654321">
+                    <animate attributeName="opacity" values="0.7;1;0.7" dur="2s" repeatCount="indefinite"/>
+                </circle>
+                
+                <text x="400" y="320" text-anchor="middle" fill="white" font-size="36" font-weight="bold">
+                    Cookie Clicker Teaser
+                    <animate attributeName="opacity" values="0.7;1;0.7" dur="3s" repeatCount="indefinite"/>
+                </text>
+                
+                <text x="400" y="370" text-anchor="middle" fill="#ffeb3b" font-size="24">
+                    Click the cookie to earn cookies!
+                </text>
+                
+                <text x="400" y="410" text-anchor="middle" fill="#ffeb3b" font-size="24">
+                    Buy upgrades for automatic production!
+                </text>
+                
+                <text x="400" y="480" text-anchor="middle" fill="#4CAF50" font-size="28" font-weight="bold">
+                    TAP TO START
+                    <animate attributeName="fill" values="#4CAF50;#8BC34A;#4CAF50" dur="1.5s" repeatCount="indefinite"/>
+                </text>
+                
+                <rect x="350" y="450" width="100" height="50" fill="transparent" stroke="#4CAF50" stroke-width="2" rx="25">
+                    <animate attributeName="stroke-opacity" values="0.5;1;0.5" dur="1.5s" repeatCount="indefinite"/>
+                </rect>
+            </svg>
+        </div>
+        
+        <canvas id="gameCanvas"></canvas>
+        
+        <div id="ui">
+            <div id="cookieCount">🍪 0</div>
+            <div id="timer">30</div>
+        </div>
+        
+        <div id="upgradesPanel">
+            <!-- Upgrades will be populated by JavaScript -->
+        </div>
+        
+        <div id="personalityPanel">
+            <div id="personalityTitle"></div>
+            <div id="personalityDescription"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script>
+        class CookieClickerGame {
+            constructor() {
+                this.canvas = document.getElementById('gameCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.state = 'instructions';
+                
+                // Game state
+                this.cookies = 0;
+                this.cookiesPerSecond = 0;
+                this.timeLeft = 30;
+                this.gameStartTime = null;
+                
+                // Behavioral tracking
+                this.behaviorData = {
+                    clicks: 0,
+                    totalClickTime: 0,
+                    leftClicks: 0,
+                    rightClicks: 0,
+                    centerClicks: 0,
+                    clickTimes: [],
+                    upgradesPurchased: 0,
+                    aggressiveClicking: 0
+                };
+                
+                // Cookie properties
+                this.cookieX = 0;
+                this.cookieY = 0;
+                this.cookieRadius = 80;
+                this.cookieRotation = 0;
+                this.cookieScale = 1;
+                
+                // Particles
+                this.particles = [];
+                
+                // Upgrades
+                this.upgrades = [
+                    { name: "Grandma", cost: 15, cps: 1, owned: 0, description: "A nice grandma to bake more cookies" },
+                    { name: "Farm", cost: 100, cps: 8, owned: 0, description: "Grows cookie plants" },
+                    { name: "Mine", cost: 500, cps: 47, owned: 0, description: "Mines cookie dough" },
+                    { name: "Factory", cost: 3000, cps: 260, owned: 0, description: "Mass produces cookies" },
+                    { name: "Bank", cost: 10000, cps: 1400, owned: 0, description: "Generates cookies from interest" },
+                    { name: "Temple", cost: 40000, cps: 7800, owned: 0, description: "Full of precious cookies" },
+                    { name: "Tower", cost: 200000, cps: 44000, owned: 0, description: "A towering cookie monument" },
+                    { name: "Shipment", cost: 1600000, cps: 260000, owned: 0, description: "Brings cookies from space" },
+                    { name: "Lab", cost: 10000000, cps: 1600000, owned: 0, description: "Turns gold into cookies" },
+                    { name: "Portal", cost: 50000000, cps: 10000000, owned: 0, description: "Opens door to cookie dimension" }
+                ];
+                
+                this.init();
+            }
+            
+            init() {
+                this.setupCanvas();
+                this.setupEventListeners();
+                this.setupUpgradesUI();
+                this.gameLoop();
+                
+                // Setup resize observer
+                const resizeObserver = new ResizeObserver(() => {
+                    this.setupCanvas();
+                });
+                resizeObserver.observe(document.getElementById('gameContainer'));
+            }
+            
+            setupCanvas() {
+                const container = document.getElementById('gameContainer');
+                const rect = container.getBoundingClientRect();
+                
+                this.canvas.width = rect.width;
+                this.canvas.height = rect.height;
+                this.canvas.style.width = rect.width + 'px';
+                this.canvas.style.height = rect.height + 'px';
+                
+                // Update cookie position
+                this.cookieX = this.canvas.width / 2;
+                this.cookieY = this.canvas.height / 2;
+            }
+            
+            setupEventListeners() {
+                // Instruction panel click
+                document.getElementById('instructionPanel').addEventListener('click', () => {
+                    this.startGame();
+                });
+                
+                // Canvas interactions
+                this.canvas.addEventListener('click', (e) => this.handleClick(e));
+                this.canvas.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    this.handleTouch(e);
+                });
+                
+                // Upgrade clicks
+                document.getElementById('upgradesPanel').addEventListener('click', (e) => {
+                    if (e.target.classList.contains('upgrade')) {
+                        const upgradeIndex = parseInt(e.target.dataset.index);
+                        this.buyUpgrade(upgradeIndex);
+                    }
+                });
+                
+                // Window resize
+                window.addEventListener('resize', () => {
+                    this.setupCanvas();
+                });
+            }
+            
+            startGame() {
+                this.state = 'playing';
+                this.gameStartTime = Date.now();
+                
+                // Hide instruction panel
+                gsap.to('#instructionPanel', {
+                    opacity: 0,
+                    duration: 0.5,
+                    onComplete: () => {
+                        document.getElementById('instructionPanel').style.display = 'none';
+                    }
+                });
+                
+                // Start timer
+                this.startTimer();
+                
+                // Start automatic cookie production
+                this.startAutomaticProduction();
+            }
+            
+            startTimer() {
+                const timerInterval = setInterval(() => {
+                    this.timeLeft--;
+                    document.getElementById('timer').textContent = this.timeLeft;
+                    
+                    if (this.timeLeft <= 0) {
+                        clearInterval(timerInterval);
+                        this.endGame();
+                    }
+                }, 1000);
+            }
+            
+            startAutomaticProduction() {
+                setInterval(() => {
+                    if (this.state === 'playing' && this.cookiesPerSecond > 0) {
+                        this.cookies += this.cookiesPerSecond / 10; // Update 10 times per second
+                        this.updateUI();
+                    }
+                }, 100);
+            }
+            
+            handleClick(e) {
+                if (this.state !== 'playing') return;
+                
+                const rect = this.canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                this.processClick(x, y);
+            }
+            
+            handleTouch(e) {
+                if (this.state !== 'playing') return;
+                
+                const rect = this.canvas.getBoundingClientRect();
+                const touch = e.touches[0];
+                const x = touch.clientX - rect.left;
+                const y = touch.clientY - rect.top;
+                
+                this.processClick(x, y);
+            }
+            
+            processClick(x, y) {
+                const distance = Math.sqrt((x - this.cookieX) ** 2 + (y - this.cookieY) ** 2);
+                
+                if (distance <= this.cookieRadius) {
+                    const clickTime = Date.now();
+                    this.behaviorData.clicks++;
+                    this.behaviorData.clickTimes.push(clickTime);
+                    
+                    // Track hand preference
+                    const screenCenter = this.canvas.width / 2;
+                    if (x < screenCenter * 0.4) {
+                        this.behaviorData.leftClicks++;
+                    } else if (x > screenCenter * 1.6) {
+                        this.behaviorData.rightClicks++;
+                    } else {
+                        this.behaviorData.centerClicks++;
+                    }
+                    
+                    // Check for aggressive clicking
+                    if (this.behaviorData.clickTimes.length > 1) {
+                        const timeDiff = clickTime - this.behaviorData.clickTimes[this.behaviorData.clickTimes.length - 2];
+                        if (timeDiff < 200) {
+                            this.behaviorData.aggressiveClicking++;
+                        }
+                    }
+                    
+                    this.cookies++;
+                    this.createClickParticles(x, y);
+                    this.animateCookie();
+                    this.updateUI();
+                }
+            }
+            
+            createClickParticles(x, y) {
+                for (let i = 0; i < 5; i++) {
+                    this.particles.push({
+                        x: x + (Math.random() - 0.5) * 40,
+                        y: y + (Math.random() - 0.5) * 40,
+                        vx: (Math.random() - 0.5) * 8,
+                        vy: (Math.random() - 0.5) * 8 - 2,
+                        life: 1,
+                        decay: 0.02,
+                        size: Math.random() * 6 + 2,
+                        color: `hsl(${Math.random() * 60 + 20}, 70%, 60%)`
+                    });
+                }
+            }
+            
+            animateCookie() {
+                gsap.to(this, {
+                    cookieScale: 1.2,
+                    duration: 0.1,
+                    yoyo: true,
+                    repeat: 1,
+                    ease: "power2.out"
+                });
+                
+                gsap.to(this, {
+                    cookieRotation: this.cookieRotation + 15,
+                    duration: 0.2,
+                    ease: "power2.out"
+                });
+            }
+            
+            buyUpgrade(index) {
+                const upgrade = this.upgrades[index];
+                if (this.cookies >= upgrade.cost) {
+                    this.cookies -= upgrade.cost;
+                    upgrade.owned++;
+                    this.cookiesPerSecond += upgrade.cps;
+                    upgrade.cost = Math.floor(upgrade.cost * 1.15);
+                    
+                    this.behaviorData.upgradesPurchased++;
+                    
+                    this.updateUI();
+                    this.setupUpgradesUI();
+                }
+            }
+            
+            setupUpgradesUI() {
+                const panel = document.getElementById('upgradesPanel');
+                panel.innerHTML = '';
+                
+                this.upgrades.forEach((upgrade, index) => {
+                    const div = document.createElement('div');
+                    div.className = 'upgrade';
+                    div.dataset.index = index;
+                    
+                    const affordable = this.cookies >= upgrade.cost;
+                    div.classList.add(affordable ? 'affordable' : 'unaffordable');
+                    
+                    div.innerHTML = `
+                        <div><strong>${upgrade.name}</strong> (${upgrade.owned})</div>
+                        <div>Cost: ${this.formatNumber(upgrade.cost)} 🍪</div>
+                        <div>+${this.formatNumber(upgrade.cps)} CPS</div>
+                    `;
+                    
+                    panel.appendChild(div);
+                });
+            }
+            
+            updateUI() {
+                document.getElementById('cookieCount').textContent = `🍪 ${this.formatNumber(Math.floor(this.cookies))}`;
+                
+                if (this.cookiesPerSecond > 0) {
+                    document.getElementById('cookieCount').innerHTML += `<br><small>+${this.formatNumber(this.cookiesPerSecond)}/sec</small>`;
+                }
+                
+                this.setupUpgradesUI();
+            }
+            
+            formatNumber(num) {
+                if (num >= 1000000) {
+                    return (num / 1000000).toFixed(1) + 'M';
+                } else if (num >= 1000) {
+                    return (num / 1000).toFixed(1) + 'K';
+                }
+                return num.toString();
+            }
+            
+            endGame() {
+                this.state = 'ended';
+                this.showPersonalityResults();
+            }
+            
+            showPersonalityResults() {
+                const personality = this.analyzePersonality();
+                
+                document.getElementById('personalityTitle').textContent = personality.type;
+                document.getElementById('personalityDescription').innerHTML = personality.description;
+                
+                const panel = document.getElementById('personalityPanel');
+                panel.style.display = 'flex';
+                
+                gsap.fromTo(panel, 
+                    { opacity: 0, scale: 0.8 },
+                    { opacity: 1, scale: 1, duration: 1, ease: "power2.out" }
+                );
+            }
+            
+            analyzePersonality() {
+                const totalClicks = this.behaviorData.clicks;
+                const upgradesPurchased = this.behaviorData.upgradesPurchased;
+                const aggressiveRatio = this.behaviorData.aggressiveClicking / Math.max(totalClicks, 1);
+                
+                // Determine hand preference
+                let handPreference = "Ambidextrous";
+                const leftRatio = this.behaviorData.leftClicks / Math.max(totalClicks, 1);
+                const rightRatio = this.behaviorData.rightClicks / Math.max(totalClicks, 1);
+                
+                if (leftRatio > 0.6) handPreference = "Left-handed";
+                else if (rightRatio > 0.6) handPreference = "Right-handed";
+                
+                // Personality analysis
+                if (aggressiveRatio > 0.3 && totalClicks > 20) {
+                    return {
+                        type: "The Speed Demon",
+                        description: `You're a fast-paced, action-oriented player who loves rapid clicking! You made ${totalClicks} clicks and bought ${upgradesPurchased} upgrades. Your dominant hand appears to be ${handPreference}. You thrive on immediate results and high-energy gameplay.`
+                    };
+                } else if (upgradesPurchased > 3) {
+                    return {
+                        type: "The Strategic Investor",
+                        description: `You're a thoughtful strategist who focuses on long-term growth! You purchased ${upgradesPurchased} upgrades and made ${totalClicks} clicks. Your dominant hand appears to be ${handPreference}. You understand that patience and smart investments lead to greater rewards.`
+                    };
+                } else if (totalClicks > 15) {
+                    return {
+                        type: "The Persistent Clicker",
+                        description: `You're a dedicated hands-on player who believes in hard work! You made ${totalClicks} clicks and bought ${upgradesPurchased} upgrades. Your dominant hand appears to be ${handPreference}. You prefer earning through direct action rather than automation.`
+                    };
+                } else {
+                    return {
+                        type: "The Casual Explorer",
+                        description: `You're a relaxed player who enjoys exploring at your own pace! You made ${totalClicks} clicks and bought ${upgradesPurchased} upgrades. Your dominant hand appears to be ${handPreference}. You appreciate the journey more than the destination.`
+                    };
+                }
+            }
+            
+            gameLoop() {
+                this.update();
+                this.render();
+                requestAnimationFrame(() => this.gameLoop());
+            }
+            
+            update() {
+                // Update particles
+                this.particles = this.particles.filter(particle => {
+                    particle.x += particle.vx;
+                    particle.y += particle.vy;
+                    particle.vy += 0.2; // gravity
+                    particle.life -= particle.decay;
+                    return particle.life > 0;
+                });
+                
+                // Update cookie rotation
+                this.cookieRotation += 0.5;
+            }
+            
+            render() {
+                // Clear canvas
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                if (this.state === 'playing' || this.state === 'ended') {
+                    // Draw background particles
+                    this.drawBackgroundParticles();
+                    
+                    // Draw cookie
+                    this.drawCookie();
+                    
+                    // Draw particles
+                    this.drawParticles();
+                }
+            }
+            
+            drawBackgroundParticles() {
+                const time = Date.now() * 0.001;
+                for (let i = 0; i < 20; i++) {
+                    const x = (Math.sin(time + i) * 0.5 + 0.5) * this.canvas.width;
+                    const y = (Math.cos(time * 0.7 + i) * 0.5 + 0.5) * this.canvas.height;
+                    
+                    this.ctx.fillStyle = `rgba(255, 255, 255, ${0.1 + Math.sin(time + i) * 0.05})`;
+                    this.ctx.beginPath();
+                    this.ctx.arc(x, y, 2, 0, Math.PI * 2);
+                    this.ctx.fill();
+                }
+            }
+            
+            drawCookie() {
+                this.ctx.save();
+                this.ctx.translate(this.cookieX, this.cookieY);
+                this.ctx.rotate(this.cookieRotation * Math.PI / 180);
+                this.ctx.scale(this.cookieScale, this.cookieScale);
+                
+                // Cookie base
+                const gradient = this.ctx.createRadialGradient(0, 0, 0, 0, 0, this.cookieRadius);
+                gradient.addColorStop(0, '#D2691E');
+                gradient.addColorStop(1, '#8B4513');
+                
+                this.ctx.fillStyle = gradient;
+                this.ctx.beginPath();
+                this.ctx.arc(0, 0, this.cookieRadius, 0, Math.PI * 2);
+                this.ctx.fill();
+                
+                // Cookie border
+                this.ctx.strokeStyle = '#654321';
+                this.ctx.lineWidth = 4;
+                this.ctx.stroke();
+                
+                // Chocolate chips
+                const chips = [
+                    { x: -20, y: -15, r: 8 },
+                    { x: 25, y: -10, r: 6 },
+                    { x: -10, y: 20, r: 7 },
+                    { x: 15, y: 25, r: 5 },
+                    { x: -30, y: 10, r: 6 }
+                ];
+                
+                this.ctx.fillStyle = '#654321';
+                chips.forEach(chip => {
+                    this.ctx.beginPath();
+                    this.ctx.arc(chip.x, chip.y, chip.r, 0, Math.PI * 2);
+                    this.ctx.fill();
+                });
+                
+                this.ctx.restore();
+            }
+            
+            drawParticles() {
+                this.particles.forEach(particle => {
+                    this.ctx.save();
+                    this.ctx.globalAlpha = particle.life;
+                    this.ctx.fillStyle = particle.color;
+                    this.ctx.beginPath();
+                    this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                    this.ctx.fill();
+                    this.ctx.restore();
+                });
+            }
+        }
+        
+        // Initialize game when page loads
+        window.addEventListener('load', () => {
+            new CookieClickerGame();
+        });
+    </script>
+</body>
+</html>
+    </div>
+    <div class="watermark">GameCraft AI</div>
+    
+    <script>
+        // Prevent zooming on mobile
+        document.addEventListener('gesturestart', function (e) {
+            e.preventDefault();
+        });
+        
+        document.addEventListener('gesturechange', function (e) {
+            e.preventDefault();
+        });
+        
+        document.addEventListener('gestureend', function (e) {
+            e.preventDefault();
+        });
+        
+        // Game analytics (optional)
+        console.log('Game ID: game_1753783992492_m3q1q9rgbep');
+        console.log('Theme: Cookie Clicker Teaser');
+        console.log('Generated at: 2025-07-29T10:13:12.492Z');
+    </script>
+</body>
+</html>
